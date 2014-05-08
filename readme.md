@@ -21,4 +21,5 @@ save the scaled image to a new file
 ##### Issues
 
 Your image must be a png image with a transparent background.
+
 Only the scalable area is used, fill area is ignored.
