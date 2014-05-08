@@ -5,8 +5,8 @@ see https://developer.android.com/tools/help/draw9patch.html
 ##### Python usage
 
     >>> import ninepatch
-    >>> ninepatch = ninepatch.Ninepatch('9patch_test.png')
-    >>> scaled_image = ninepatch.render(500, 400) # creates a new PIL image
+    >>> ninepatch_obj = ninepatch.Ninepatch('9patch_test.png')
+    >>> scaled_image = ninepatch_obj.render(500, 400) # creates a new PIL image
 
 ##### Command line usage
 
