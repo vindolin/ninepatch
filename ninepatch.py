@@ -78,6 +78,7 @@ class Ninepatch(object):
 
     @staticmethod
     def distributor(start):
+        '''decrement start and yield 1 until it is exhausted, than yield 0'''
         n = start
         while True:
             yield 1 if n > 0 else 0
