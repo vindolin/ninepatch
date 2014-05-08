@@ -18,8 +18,20 @@ save the scaled image to a new file
 
     $ ninepatch.py 9patch_test.png 300 300 scaled.png
 
+##### Notes
+
+You can see the module in action in the ninepatch_actor.py from my Clutter example project: https://github.com/vindolin/Clutter-Python-examples
+
 ##### Issues
 
 Your image must be a png image with a transparent background.
 
 Only the scalable area is used, fill area is ignored.
+
+
+##### TODO
+
+Add setup.py
+
+Unittest
+
