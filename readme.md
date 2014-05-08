@@ -12,7 +12,7 @@ see https://developer.android.com/tools/help/draw9patch.html
 
 open the scaled image in a viewer
 
-    $ python ninepatch.py 9patch_test.png 300 300
+    $ ninepatch.py 9patch_test.png 300 300
 
 save the scaled image to a new file
 
