@@ -6,7 +6,7 @@ import tempfile
 
 sys.path.insert(0, os.path.dirname(__file__) + '/')
 
-from ninepatch import ninepatch
+import ninepatch
 
 
 class TestNinepatch(unittest.TestCase):
