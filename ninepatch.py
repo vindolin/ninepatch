@@ -158,11 +158,11 @@ class Ninepatch(object):
         y_coord = 0
 
         for x, column in enumerate(tiles):
-            extra_x = 0 if is_even(x) else extra_x_distributor.next()
+            extra_x = 0 if is_even(x) else next(extra_x_distributor)
             extra_y_distributor = Ninepatch.distributor(extra['y'])
 
             for y, tile in enumerate(column):
-                extra_y = 0 if is_even(y) else extra_y_distributor.next()
+                extra_y = 0 if is_even(y) else next(extra_y_distributor)
 
                 if y == 0:
                     y_coord = 0  # reset y_coord
