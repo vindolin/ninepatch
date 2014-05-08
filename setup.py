@@ -11,6 +11,6 @@ setup(
     url='http://pypi.python.org/pypi/TowelStuff/',
     license='MIT License',
     description='Slice and scale 9-patch images',
-    long_description=open('readme.md').read(),
+    long_description=open('README.txt').read(),
     install_requires=["pillow"],
 )
