@@ -57,8 +57,14 @@ class Ninepatch(object):
         '''slice a 9 patch image'''
         marks = self.find_marks(self.image)
 
-        slice_marks = {'x': [], 'y': []}
-        image_size = {'x': self.image.size[0], 'y': self.image.size[1]}
+        slice_marks = {
+            'x': [],
+            'y': []
+        }
+        image_size = {
+            'x': self.image.size[0],
+            'y': self.image.size[1]
+        }
         for axis in ('x', 'y'):
             slice_marks[axis] = [1] + list(
                 self._chain(marks[axis])) + [image_size[axis]]
