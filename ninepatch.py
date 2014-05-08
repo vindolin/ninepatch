@@ -63,10 +63,11 @@ class Ninepatch(object):
             'y': len(slice_marks['y']) - 1,
         }
 
-        pieces = [[0 for y in range(counts['y'])] for x in range(counts['x'])]
+        tiles = [[0 for y in range(counts['y'])] for x in range(counts['x'])]
         for x in range(counts['x']):
             for y in range(counts['y']):
-                pieces[x][y] = self.image.crop(
+
+                tiles[x][y] = self.image.crop(
                     (
                         slice_marks['x'][x],
                         slice_marks['y'][y],
@@ -74,7 +75,7 @@ class Ninepatch(object):
                         slice_marks['y'][y + 1],
                     )
                 )
-        return pieces
+        return tiles
 
     @staticmethod
     def distributor(start):
@@ -85,52 +86,52 @@ class Ninepatch(object):
             n -= 1
 
     def render(self, width, height, filter=Image.ANTIALIAS):
-        '''slices an image an scales the scalable pieces'''
+        '''slices an image an scales the scalable tiles'''
 
-        pieces = self.slice()
+        tiles = self.slice()
         scaled_image = Image.new('RGBA', (width, height), None)
 
-        piece_count = {
-            'x': len(pieces) - 1,
-            'y': len(pieces[0]),
+        tile_count = {
+            'x': len(tiles) - 1,
+            'y': len(tiles[0]),
         }
-        scaleable_piece_count = {
-            'x': piece_count['x'] / 2,
-            'y': piece_count['y'] / 2,
+        scaleable_tile_count = {
+            'x': tile_count['x'] / 2,
+            'y': tile_count['y'] / 2,
         }
         min_size = {
             'x': 0,
             'y': 0,
         }
 
-        # all the even pieces are the ones that can be scaled
+        # all the even tiles are the ones that can be scaled
 
         # calculate min_size
-        for x, column in enumerate(pieces):
-            for y, piece in enumerate(column):
+        for x, column in enumerate(tiles):
+            for y, tile in enumerate(column):
                 if y == 0 and is_even(x):  # only on first row
-                    min_size['x'] += piece.size[0]
+                    min_size['x'] += tile.size[0]
                 if x == 0 and is_even(y):  # only on first column
-                    min_size['y'] += piece.size[1]
+                    min_size['y'] += tile.size[1]
 
         # sanity check
-        if width < min_size['x'] + scaleable_piece_count['x']:
-            raise ScaleError('width cannot be smaller than %s' % (min_size['x'] + scaleable_piece_count['x']))
-        if height < min_size['y'] + scaleable_piece_count['y']:
-            raise ScaleError('height cannot be smaller than %s' % (min_size['y'] + scaleable_piece_count['y']))
+        if width < min_size['x'] + scaleable_tile_count['x']:
+            raise ScaleError('width cannot be smaller than %s' % (min_size['x'] + scaleable_tile_count['x']))
+        if height < min_size['y'] + scaleable_tile_count['y']:
+            raise ScaleError('height cannot be smaller than %s' % (min_size['y'] + scaleable_tile_count['y']))
 
         total_scale = {
             'x': width - min_size['x'],
             'y': height - min_size['y'],
         }
-        piece_scale = {
-            'x': int(total_scale['x'] / scaleable_piece_count['x']),
-            'y': int(total_scale['y'] / scaleable_piece_count['y']),
+        tile_scale = {
+            'x': int(total_scale['x'] / scaleable_tile_count['x']),
+            'y': int(total_scale['y'] / scaleable_tile_count['y']),
         }
         # rounding differences
         extra = {
-            'x': total_scale['x'] - (piece_scale['x'] * scaleable_piece_count['x']),
-            'y': total_scale['y'] - (piece_scale['y'] * scaleable_piece_count['y']),
+            'x': total_scale['x'] - (tile_scale['x'] * scaleable_tile_count['x']),
+            'y': total_scale['y'] - (tile_scale['y'] * scaleable_tile_count['y']),
         }
 
         x_coord = 0
@@ -139,30 +140,30 @@ class Ninepatch(object):
         # distributes the pixels from the rounding differences until exhausted
         extra_x_distributor = Ninepatch.distributor(extra['x'])
 
-        for x, column in enumerate(pieces):
+        for x, column in enumerate(tiles):
             extra_x = 0 if is_even(x) else extra_x_distributor.next()
             extra_y_distributor = Ninepatch.distributor(extra['y'])
 
-            for y, piece in enumerate(column):
+            for y, tile in enumerate(column):
                 extra_y = 0 if is_even(y) else extra_y_distributor.next()
 
                 if y == 0:
                     y_coord = 0  # reset y_coord
 
                 if is_even(x) and is_even(y):
-                    pass  # use piece as is
+                    pass  # use tile as is
                 elif is_even(x):  # scale y
-                    piece = piece.resize((piece.size[0], piece_scale['y'] + extra_y), filter)
+                    tile = tile.resize((tile.size[0], tile_scale['y'] + extra_y), filter)
                 elif is_even(y):  # scale x
-                    piece = piece.resize((piece_scale['x'] + extra_x, piece.size[1]), filter)
+                    tile = tile.resize((tile_scale['x'] + extra_x, tile.size[1]), filter)
                 else:  # scale both
-                    piece = piece.resize((piece_scale['x'] + extra_x, piece_scale['y'] + extra_y), filter)
+                    tile = tile.resize((tile_scale['x'] + extra_x, tile_scale['y'] + extra_y), filter)
 
-                scaled_image.paste(piece, (x_coord, y_coord))
+                scaled_image.paste(tile, (x_coord, y_coord))
 
-                y_coord += piece.size[1]
+                y_coord += tile.size[1]
 
-            x_coord += piece.size[0]
+            x_coord += tile.size[0]
 
         return scaled_image
 
