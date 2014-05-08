@@ -28,6 +28,7 @@ Your image must be a png image with a transparent background.
 The scale guide color must be 100% opaque black.
 
 See the example/unittest image:
+
 ![alt text](https://raw.githubusercontent.com/vindolin/Clutter-Python-examples/master/ninepatch/9patch_test.png "Example image")
 
 Only the scalable area is used, fill area is ignored.
