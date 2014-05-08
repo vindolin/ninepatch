@@ -1,4 +1,4 @@
-#### Slice Android style 9 -patch images into tiles and resize into a scaled version
+#### Slice Android style 9-patch images into tiles and resize into a scaled version
 
 see https://developer.android.com/tools/help/draw9patch.html
 
