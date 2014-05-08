@@ -188,21 +188,3 @@ class Ninepatch(object):
             x_coord += tile.size[0]
 
         return scaled_image
-
-
-if __name__ == '__main__':
-    import argparse
-    parser = argparse.ArgumentParser()
-    parser.add_argument('source_filename')
-    parser.add_argument('width', type=int)
-    parser.add_argument('height', type=int)
-    parser.add_argument('target_filename', nargs='?')
-    args = parser.parse_args()
-
-    ninepatch = Ninepatch(args.source_filename)
-
-    scaled_image = ninepatch.render(args.width, args.height)
-    if args.target_filename:
-        scaled_image.save(args.target_filename)
-    else:
-        scaled_image.show()
