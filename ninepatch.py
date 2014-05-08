@@ -1,5 +1,4 @@
 from PIL import Image
-import numpy as np
 
 
 class ScaleError(Exception):
@@ -8,20 +7,20 @@ class ScaleError(Exception):
 
 def find_marks(image):
     '''find the cut marks'''
-    data = np.asarray(image)
+    pixels = image.load()
 
     marks = {'x': [], 'y': []}
 
-    black = np.array([0, 0, 0, 255])
+    black = (0, 0, 0, 255)
 
-    for axis in ('x', 'y'):
+    for axis_i, axis in enumerate(('x', 'y')):
         start_mark = None
         end_mark = None
 
-        data = data.swapaxes(0, 1)
-
-        for i, items in enumerate(data):
-            if np.array_equal(items[0], black):
+        coord = [0, 0]
+        for i in range(image.size[axis_i]):
+            coord[axis_i] = i
+            if pixels[tuple(coord)] == black:
                 if start_mark:
                     end_mark = i
                 else:
