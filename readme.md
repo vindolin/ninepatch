@@ -37,8 +37,5 @@ Only the scalable area is used, fill area is ignored.
 
 Add setup.py
 
-Unittest
-
-
 
 [![Build Status](https://travis-ci.org/vindolin/ninepatch.svg?branch=master)](https://travis-ci.org/vindolin/ninepatch)
