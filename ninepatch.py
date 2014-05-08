@@ -12,10 +12,10 @@ class Ninepatch(object):
         self.image = Image.open(filename)
         self.marks = self.find_marks(self.image)
 
-    def chain(self, marks):
+    def _chain(self, marks):
         for mark in marks:
             yield mark[0]
-            yield mark[1] + 1
+            yield mark[1] + 1  # shift end of black region to next tile
 
     def find_marks(self, image):
         '''find the cut marks'''
@@ -23,16 +23,19 @@ class Ninepatch(object):
 
         marks = {'x': [], 'y': []}
 
-        black = (0, 0, 0, 255)
+        scalable_marker_color = (0, 0, 0, 255)
 
         for axis_i, axis in enumerate(('x', 'y')):
             start_mark = None
             end_mark = None
 
-            coord = [0, 0]
+            coord = [0, 0]  # our handle to rotate the axes
+
+            # iterate over the first pixels on that axis
             for i in range(image.size[axis_i]):
-                coord[axis_i] = i
-                if pixels[tuple(coord)] == black:
+                coord[axis_i] = i  # select axis to search
+
+                if pixels[tuple(coord)] == scalable_marker_color:
                     if start_mark:
                         end_mark = i
                     else:
@@ -46,20 +49,23 @@ class Ninepatch(object):
 
         return marks
 
-    def slice_image(self):
+    def slice(self):
         '''slice a 9 patch image'''
         marks = self.find_marks(self.image)
 
         slice_marks = {'x': [], 'y': []}
         image_size = {'x': self.image.size[0], 'y': self.image.size[1]}
         for axis in ('x', 'y'):
-            slice_marks[axis] = [1] + list(self.chain(marks[axis])) + [image_size[axis]]
+            slice_marks[axis] = [1] + list(self._chain(marks[axis])) + [image_size[axis]]
 
-        x_count = len(slice_marks['x']) - 1
-        y_count = len(slice_marks['y']) - 1
-        pieces = [[0 for y in range(y_count)] for x in range(x_count)]
-        for x in range(x_count):
-            for y in range(y_count):
+        counts = {
+            'x': len(slice_marks['x']) - 1,
+            'y': len(slice_marks['y']) - 1,
+        }
+
+        pieces = [[0 for y in range(counts['y'])] for x in range(counts['x'])]
+        for x in range(counts['x']):
+            for y in range(counts['y']):
                 pieces[x][y] = self.image.crop(
                     (
                         slice_marks['x'][x],
@@ -80,7 +86,7 @@ class Ninepatch(object):
     def render(self, width, height, filter=Image.ANTIALIAS):
         '''slices an image an scales the scalable pieces'''
 
-        pieces = self.slice_image()
+        pieces = self.slice()
         scaled_image = Image.new('RGBA', (width, height), None)
 
         piece_count = {
@@ -95,6 +101,8 @@ class Ninepatch(object):
             'x': 0,
             'y': 0,
         }
+
+        # all the even pieces are the ones that can be scaled
 
         # calculate min_size
         for x, column in enumerate(pieces):
@@ -127,6 +135,7 @@ class Ninepatch(object):
         x_coord = 0
         y_coord = 0
 
+        # distributes the pixels from the rounding differences until exhausted
         extra_x_distributor = Ninepatch.distributor(extra['x'])
 
         for x, column in enumerate(pieces):
@@ -137,10 +146,10 @@ class Ninepatch(object):
                 extra_y = 0 if is_even(y) else extra_y_distributor.next()
 
                 if y == 0:
-                    y_coord = 0
+                    y_coord = 0  # reset y_coord
+
                 if is_even(x) and is_even(y):
                     pass  # use piece as is
-
                 elif is_even(x):  # scale y
                     piece = piece.resize((piece.size[0], piece_scale['y'] + extra_y), filter)
                 elif is_even(y):  # scale x
