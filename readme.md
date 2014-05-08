@@ -25,7 +25,6 @@ You can see the module in action in the ninepatch_actor.py from my Clutter examp
 ##### Issues
 
 Your image must be a png image with a transparent background.
-<<<<<<< HEAD
 The scale guide color must be 100% opaque black.
 
 See the example/unittest image:
@@ -34,15 +33,12 @@ See the example/unittest image:
 
 Only the scalable area is used, fill area is ignored.
 
-=======
-
-Only the scalable area is used, fill area is ignored.
-
-
->>>>>>> d474ac61afc086e2fb137728143e9752803bb0dd
 ##### TODO
 
 Add setup.py
 
 Unittest
 
+
+
+[![Build Status](https://travis-ci.org/vindolin/ninepatch.svg?branch=master)](https://travis-ci.org/vindolin/ninepatch)
