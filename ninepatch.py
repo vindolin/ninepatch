@@ -189,6 +189,25 @@ class Ninepatch(object):
 
         return scaled_image
 
+
+import unittest
+import os
+import filecmp
+import tempfile
+
+
+class TestNinepatch(unittest.TestCase):
+    def test_ninepatch(self):
+        # compare with the test image
+        image_path = os.path.dirname(os.path.realpath(__file__)) + os.sep
+        test_image = image_path + '9patch_test.png'
+        original_image = image_path + 'test_original_421_333.png'
+        scaled_image = tempfile.gettempdir() + os.sep + 'test_scaled_421_333.png'
+        ninepatch = Ninepatch(test_image)
+        ninepatch.render(421, 333).save(scaled_image, format='PNG')
+        self.assertTrue(filecmp.cmp(scaled_image, original_image))
+        os.remove(scaled_image)
+
 if __name__ == '__main__':
     import argparse
     parser = argparse.ArgumentParser()
