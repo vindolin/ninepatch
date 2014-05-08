@@ -124,7 +124,6 @@ def scale_image(filename, width, height, filter=Image.ANTIALIAS):
         'x': total_scale['x'] - (piece_scale['x'] * scaleable_piece_count['x']),
         'y': total_scale['y'] - (piece_scale['y'] * scaleable_piece_count['y']),
     }
-    # print(extra)
 
     x_coord = 0
     y_coord = 0
@@ -159,6 +158,4 @@ def scale_image(filename, width, height, filter=Image.ANTIALIAS):
     return scaled_im
 
 if __name__ == '__main__':
-    scale_image('../assets/9patch_test2.png', 506, 601).show()
-    #print(find_marks(im))
-    # scale_image('../epg/assets/9patch_test.png', 200, 500).show()
+    scale_image('9patch_test.png', 506, 601).show()
