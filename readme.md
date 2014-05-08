@@ -18,3 +18,7 @@ save the scaled image to a new file
 
     $ ninepatch.py 9patch_test.png 300 300 scaled.png
 
+##### Issues
+
+Your image must be a png image with a transparent background.
+Only the scalable area is used, fill area is ignored.
