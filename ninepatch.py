@@ -1,6 +1,9 @@
 from PIL import Image
 
 
+__all__ = ['Ninepatch', 'ScaleError']
+
+
 class ScaleError(Exception):
     pass
 
@@ -8,6 +11,7 @@ is_even = lambda value: value % 2 == 0
 
 
 class Ninepatch(object):
+
     def __init__(self, filename):
         self.image = Image.open(filename)
         self.marks = self.find_marks(self.image)
@@ -56,7 +60,8 @@ class Ninepatch(object):
         slice_marks = {'x': [], 'y': []}
         image_size = {'x': self.image.size[0], 'y': self.image.size[1]}
         for axis in ('x', 'y'):
-            slice_marks[axis] = [1] + list(self._chain(marks[axis])) + [image_size[axis]]
+            slice_marks[axis] = [1] + list(
+                self._chain(marks[axis])) + [image_size[axis]]
 
         counts = {
             'x': len(slice_marks['x']) - 1,
@@ -67,14 +72,13 @@ class Ninepatch(object):
         for x in range(counts['x']):
             for y in range(counts['y']):
 
-                tiles[x][y] = self.image.crop(
-                    (
-                        slice_marks['x'][x],
-                        slice_marks['y'][y],
-                        slice_marks['x'][x + 1],
-                        slice_marks['y'][y + 1],
-                    )
-                )
+                # cut our tile region
+                tiles[x][y] = self.image.crop((
+                    slice_marks['x'][x],
+                    slice_marks['y'][y],
+                    slice_marks['x'][x + 1],
+                    slice_marks['y'][y + 1],
+                ))
         return tiles
 
     @staticmethod
@@ -116,9 +120,12 @@ class Ninepatch(object):
 
         # sanity check
         if width < min_size['x'] + scaleable_tile_count['x']:
-            raise ScaleError('width cannot be smaller than %s' % (min_size['x'] + scaleable_tile_count['x']))
+            raise ScaleError('width cannot be smaller than %s' %
+                             (min_size['x'] + scaleable_tile_count['x']))
+
         if height < min_size['y'] + scaleable_tile_count['y']:
-            raise ScaleError('height cannot be smaller than %s' % (min_size['y'] + scaleable_tile_count['y']))
+            raise ScaleError('height cannot be smaller than %s' %
+                             (min_size['y'] + scaleable_tile_count['y']))
 
         total_scale = {
             'x': width - min_size['x'],
@@ -130,15 +137,17 @@ class Ninepatch(object):
         }
         # rounding differences
         extra = {
-            'x': total_scale['x'] - (tile_scale['x'] * scaleable_tile_count['x']),
-            'y': total_scale['y'] - (tile_scale['y'] * scaleable_tile_count['y']),
+            'x': total_scale['x'] - (tile_scale['x'] *
+                                     scaleable_tile_count['x']),
+            'y': total_scale['y'] - (tile_scale['y'] *
+                                     scaleable_tile_count['y']),
         }
-
-        x_coord = 0
-        y_coord = 0
 
         # distributes the pixels from the rounding differences until exhausted
         extra_x_distributor = Ninepatch.distributor(extra['x'])
+
+        x_coord = 0
+        y_coord = 0
 
         for x, column in enumerate(tiles):
             extra_x = 0 if is_even(x) else extra_x_distributor.next()
@@ -153,11 +162,16 @@ class Ninepatch(object):
                 if is_even(x) and is_even(y):
                     pass  # use tile as is
                 elif is_even(x):  # scale y
-                    tile = tile.resize((tile.size[0], tile_scale['y'] + extra_y), filter)
+                    tile = tile.resize(
+                        (tile.size[0], tile_scale['y'] + extra_y), filter)
                 elif is_even(y):  # scale x
-                    tile = tile.resize((tile_scale['x'] + extra_x, tile.size[1]), filter)
+                    tile = tile.resize(
+                        (tile_scale['x'] + extra_x, tile.size[1]), filter)
                 else:  # scale both
-                    tile = tile.resize((tile_scale['x'] + extra_x, tile_scale['y'] + extra_y), filter)
+                    tile = tile.resize((
+                        tile_scale['x'] + extra_x,
+                        tile_scale['y'] + extra_y
+                    ), filter)
 
                 scaled_image.paste(tile, (x_coord, y_coord))
 
