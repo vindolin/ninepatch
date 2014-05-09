@@ -3,7 +3,7 @@ from distutils.core import setup
 
 setup(
     name='ninepatch',
-    version='0.1.1',
+    version='0.1.2',
     author='Thomas Schüßler',
     author_email='vindolin@gmail.com',
     packages=['ninepatch', 'ninepatch.test'],
