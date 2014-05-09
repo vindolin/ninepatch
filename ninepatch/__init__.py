@@ -90,6 +90,34 @@ class Ninepatch(object):
                     slice_marks['x'][x + 1],
                     slice_marks['y'][y + 1],
                 ))
+
+        self.tile_count = {
+            'x': len(tiles) - 1,
+            'y': len(tiles[0]) - 1,
+        }
+        self.scaleable_tile_count = {
+            'x': float(self.tile_count['x']) / 2,
+            'y': float(self.tile_count['y']) / 2,
+        }
+        self.fixed_tile_size = {
+            'x': 0,
+            'y': 0,
+        }
+
+        # calculate fixed_tile_size
+        for x, column in enumerate(tiles):
+            for y, tile in enumerate(column):
+                if y == 0 and is_even(x):  # only on first row
+                    self.fixed_tile_size['x'] += tile.size[0]
+                if x == 0 and is_even(y):  # only on first column
+                    self.fixed_tile_size['y'] += tile.size[1]
+
+        # add 1 pixel for every scalable region
+        self.min_scale_size = {
+            'x': self.fixed_tile_size['x'] + self.scaleable_tile_count['x'],
+            'y': self.fixed_tile_size['y'] + self.scaleable_tile_count['y'],
+        }
+
         return tiles
 
     @staticmethod
@@ -105,52 +133,31 @@ class Ninepatch(object):
 
         scaled_image = Image.new('RGBA', (width, height), None)
 
-        tile_count = {
-            'x': len(self.tiles) - 1,
-            'y': len(self.tiles[0]) - 1,
-        }
-        scaleable_tile_count = {
-            'x': float(tile_count['x']) / 2,
-            'y': float(tile_count['y']) / 2,
-        }
-        min_size = {
-            'x': 0,
-            'y': 0,
-        }
-
         # all the even tiles are the ones that can be scaled
 
-        # calculate min_size
-        for x, column in enumerate(self.tiles):
-            for y, tile in enumerate(column):
-                if y == 0 and is_even(x):  # only on first row
-                    min_size['x'] += tile.size[0]
-                if x == 0 and is_even(y):  # only on first column
-                    min_size['y'] += tile.size[1]
-
-        # sanity check
-        if width < min_size['x'] + scaleable_tile_count['x']:
+        # raise error when undersized
+        if width < self.min_scale_size['x']:
             raise ScaleError('width cannot be smaller than %s' %
-                             (min_size['x'] + scaleable_tile_count['x']))
+                             self.min_scale_size['x'])
 
-        if height < min_size['y'] + scaleable_tile_count['y']:
+        if height < self.min_scale_size['y']:
             raise ScaleError('height cannot be smaller than %s' %
-                             (min_size['y'] + scaleable_tile_count['y']))
+                             self.min_scale_size['y'])
 
         total_scale = {
-            'x': width - min_size['x'],
-            'y': height - min_size['y'],
+            'x': width - self.fixed_tile_size['x'],
+            'y': height - self.fixed_tile_size['y'],
         }
         tile_scale = {
-            'x': int(total_scale['x'] / scaleable_tile_count['x']),
-            'y': int(total_scale['y'] / scaleable_tile_count['y']),
+            'x': int(total_scale['x'] / self.scaleable_tile_count['x']),
+            'y': int(total_scale['y'] / self.scaleable_tile_count['y']),
         }
         # rounding differences
         extra = {
             'x': total_scale['x'] - (tile_scale['x'] *
-                                     scaleable_tile_count['x']),
+                                     self.scaleable_tile_count['x']),
             'y': total_scale['y'] - (tile_scale['y'] *
-                                     scaleable_tile_count['y']),
+                                     self.scaleable_tile_count['y']),
         }
 
         # distributes the pixels from the rounding differences until exhausted
