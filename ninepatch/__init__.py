@@ -107,7 +107,7 @@ class Ninepatch(object):
 
         tile_count = {
             'x': len(self.tiles) - 1,
-            'y': len(self.tiles[0]),
+            'y': len(self.tiles[0]) - 1,
         }
         scaleable_tile_count = {
             'x': float(tile_count['x']) / 2,
