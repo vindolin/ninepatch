@@ -22,7 +22,8 @@ class Ninepatch(object):
         self.image = Image.open(filename)
         self.tiles = self.slice()
 
-    def _chain(self, marks):
+    @staticmethod
+    def _chain(marks):
         for mark in marks:
             yield mark[0]
             yield mark[1] + 1  # shift end of black region to next tile
@@ -33,29 +34,27 @@ class Ninepatch(object):
 
         marks = {'x': [], 'y': []}
 
-        scalable_marker_color = (0, 0, 0, 255)
+        marker_color = (0, 0, 0, 255)
 
         for axis_i, axis in enumerate(('x', 'y')):
-            start_mark = None
-            end_mark = None
+            start_mark = end_mark = None
 
             coord = [0, 0]  # our handle to rotate the axes
 
             # iterate over the first pixels on that axis
             for i in range(image.size[axis_i]):
                 coord[axis_i] = i  # select axis to search
+                pixel = pixels[tuple(coord)]
 
-                if pixels[tuple(coord)] == scalable_marker_color:
-                    if start_mark:
-                        end_mark = i
-                    else:
+                if pixel == marker_color:
+                    if not start_mark:
                         start_mark = i
+                    end_mark = i
 
                 else:
-                    if end_mark:
+                    if start_mark:
                         marks[axis].append((start_mark, end_mark))
-                        start_mark = None
-                        end_mark = None
+                        start_mark = end_mark = None
 
         return marks
 
