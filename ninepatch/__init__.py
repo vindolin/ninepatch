@@ -2,11 +2,15 @@
 
 from PIL import Image
 
-__version__ = '0.1.0'
+
 __all__ = ['Ninepatch', 'ScaleError']
 
 
 class ScaleError(Exception):
+    pass
+
+
+class NinepatchError(Exception):
     pass
 
 is_even = lambda value: value % 2 == 0
@@ -16,7 +20,7 @@ class Ninepatch(object):
 
     def __init__(self, filename):
         self.image = Image.open(filename)
-        self.marks = self.find_marks(self.image)
+        self.tiles = self.slice()
 
     def _chain(self, marks):
         for mark in marks:
@@ -91,21 +95,20 @@ class Ninepatch(object):
 
     @staticmethod
     def distributor(start):
-        '''decrement start and yield 1 until it is exhausted, than yield 0'''
+        '''decrement start and yield 1 until it is exhausted, then yield 0'''
         n = start
         while True:
             yield 1 if n > 0 else 0
             n -= 1
 
     def render(self, width, height, filter=Image.ANTIALIAS):
-        '''slices an image an scales the scalable tiles'''
+        '''render the sliced tiles to a new scaled image'''
 
-        tiles = self.slice()
         scaled_image = Image.new('RGBA', (width, height), None)
 
         tile_count = {
-            'x': len(tiles) - 1,
-            'y': len(tiles[0]),
+            'x': len(self.tiles) - 1,
+            'y': len(self.tiles[0]),
         }
         scaleable_tile_count = {
             'x': float(tile_count['x']) / 2,
@@ -119,7 +122,7 @@ class Ninepatch(object):
         # all the even tiles are the ones that can be scaled
 
         # calculate min_size
-        for x, column in enumerate(tiles):
+        for x, column in enumerate(self.tiles):
             for y, tile in enumerate(column):
                 if y == 0 and is_even(x):  # only on first row
                     min_size['x'] += tile.size[0]
@@ -157,7 +160,7 @@ class Ninepatch(object):
         x_coord = 0
         y_coord = 0
 
-        for x, column in enumerate(tiles):
+        for x, column in enumerate(self.tiles):
             extra_x = 0 if is_even(x) else next(extra_x_distributor)
             extra_y_distributor = Ninepatch.distributor(extra['y'])
 
