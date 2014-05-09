@@ -1,5 +1,7 @@
 #### Slice Android style 9-patch images into tiles and resize them into a scaled version
 
+[![Build Status](https://travis-ci.org/vindolin/ninepatch.svg?branch=master)](https://travis-ci.org/vindolin/ninepatch)
+
 see https://developer.android.com/tools/help/draw9patch.html
 
 ##### Python usage
@@ -32,10 +34,3 @@ See the example/unittest image:
 ![alt text](https://raw.githubusercontent.com/vindolin/ninepatch/master/ninepatch/test/9patch_test.png "Example image")
 
 Only the scalable area is used, fill area is ignored.
-
-##### TODO
-
-Add setup.py
-
-
-[![Build Status](https://travis-ci.org/vindolin/ninepatch.svg?branch=master)](https://travis-ci.org/vindolin/ninepatch)

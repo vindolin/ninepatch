@@ -49,8 +49,3 @@ See the example/unittest image:
    :target: https://raw.githubusercontent.com/vindolin/ninepatch/master/ninepatch/test/9patch_test.png
 
 Only the scalable area is used, fill area is ignored.
-
-TODO
-----
-
-Add setup.py
