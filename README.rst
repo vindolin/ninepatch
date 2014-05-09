@@ -16,6 +16,9 @@ Python usage
 Command line usage
 ------------------
 
+Your image must be a png image with a transparent background. The scale
+guide color must be 100% opaque black.
+
 open the scaled image in a viewer
 
 ::
@@ -38,14 +41,17 @@ https://github.com/vindolin/Clutter-Python-examples
 Issues
 ------
 
-Your image must be a png image with a transparent background. The scale
-guide color must be 100% opaque black.
+TODO
+----
+
+Validate Image and show user errors
+Parse fill area guides
 
 See the example/unittest image:
 
-.. image:: https://raw.githubusercontent.com/vindolin/ninepatch/master/ninepatch/test/9patch_test.png
+.. image:: https://raw.githubusercontent.com/vindolin/ninepatch/master/ninepatch/test/ninepatch_bubble.png
    :width: 320
    :alt: Example image
-   :target: https://raw.githubusercontent.com/vindolin/ninepatch/master/ninepatch/test/9patch_test.png
+   :target: https://raw.githubusercontent.com/vindolin/ninepatch/master/ninepatch/test/ninepatch_bubble.png
 
-Only the scalable area is used, fill area is ignored.
+Only the scalable guides are used, fill area guides are ignored.
