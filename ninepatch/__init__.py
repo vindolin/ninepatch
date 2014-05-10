@@ -137,11 +137,11 @@ class Ninepatch(object):
 
         # raise error when undersized
         if width < self.min_scale_size['x']:
-            raise ScaleError('width cannot be smaller than %s' %
+            raise ScaleError('width cannot be smaller than %i' %
                              self.min_scale_size['x'])
 
         if height < self.min_scale_size['y']:
-            raise ScaleError('height cannot be smaller than %s' %
+            raise ScaleError('height cannot be smaller than %i' %
                              self.min_scale_size['y'])
 
         total_scale = {
