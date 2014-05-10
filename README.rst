@@ -1,7 +1,11 @@
 Slice Android style 9-patch images into tiles and resize them into a scaled version
 ------------
+
 .. image:: https://travis-ci.org/vindolin/ninepatch.svg?branch=master
+   :width: 90
+   :alt: Travis CI
    :target: https://travis-ci.org/vindolin/ninepatch
+
 
 see https://developer.android.com/tools/help/draw9patch.html
 
@@ -32,6 +36,12 @@ save the scaled image to a new file
 ::
 
     $ ninepatch 9patch_test.png 300 300 scaled.png
+
+There's also a Tkinter viewer you can use to preview your 9-patch images:
+
+::
+
+    $ ninepatch_viewer 9patch_test.png
 
 Notes
 -----
