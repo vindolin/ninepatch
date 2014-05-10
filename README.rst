@@ -1,5 +1,5 @@
 Slice Android style 9-patch images into tiles and resize them into a scaled version
-------------
+-----------------------------------------------------------------------------------
 
 .. image:: https://travis-ci.org/vindolin/ninepatch.svg?branch=master
    :width: 90
@@ -43,6 +43,11 @@ There's also a Tkinter viewer you can use to preview your 9-patch images:
 
     $ ninepatch_viewer 9patch_test.png
 
+Changelog
+---------
+0.1.4
+  added Tkinter viewer
+
 Notes
 -----
 
@@ -52,6 +57,7 @@ https://github.com/vindolin/Clutter-Python-examples
 
 Issues
 ------
+...
 
 TODO
 ----
