@@ -1,0 +1,37 @@
+#!/usr/bin/env python
+
+import Tkinter as tk
+from ninepatch import Ninepatch, ScaleError
+from PIL import ImageTk
+
+
+if __name__ == '__main__':
+    import argparse
+    parser = argparse.ArgumentParser(description='Interactively scale Android style 9-patch images.')
+    parser.add_argument('image_filename')
+    args = parser.parse_args()
+
+    ninepatch = Ninepatch(args.image_filename)
+
+    img = None
+
+    def resize(event):
+        global img
+        root.title(title)
+        try:
+            scaled_image = ninepatch.render(int(event.width * 0.9), int(event.height * 0.9))
+            img = ImageTk.PhotoImage(scaled_image)
+            canvas.create_image(event.width / 2, event.height / 2, anchor=tk.CENTER, image=img)
+        except ScaleError, e:
+            root.title(e)
+
+    title = '9-patch viewer'
+
+    root = tk.Tk()
+    root.title(title)
+    canvas = tk.Canvas(root, width=int(ninepatch.image.size[0] * 1.5), height=int(ninepatch.image.size[1] * 1.5), bg='#BBB')
+    canvas.pack(fill=tk.BOTH, expand=tk.YES)
+    canvas.create_image(1, 1, image=img)
+    canvas.bind('<Configure>', resize)
+
+    root.mainloop()
