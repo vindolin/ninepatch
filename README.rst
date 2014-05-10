@@ -17,6 +17,7 @@ Python usage
 
     from ninepatch import Ninepatch
     ninepatch = Ninepatch('9patch_test.png')
+    print(ninepatch.fill_area)  # (left, top, right, bottom)
     scaled_image = ninepatch.render(500, 400) # creates a new PIL image
 
 Command line usage
@@ -45,10 +46,13 @@ There's also a Tkinter viewer you can use to preview your 9-patch images:
 
 Changelog
 ---------
-0.1.4
-  added Tkinter viewer
+0.1.6
+  parse the fill area
+  switched to setuptools
 0.1.5
   minor bugfix
+0.1.4
+  added Tkinter viewer
 
 Notes
 -----
@@ -65,13 +69,12 @@ TODO
 ----
 
 Validate Image and show user errors
-Parse fill area guides
 
 See the example/unittest image:
 
-.. image:: https://raw.githubusercontent.com/vindolin/ninepatch/master/ninepatch/test/ninepatch_bubble.png
+.. image:: https://raw.githubusercontent.com/vindolin/ninepatch/master/ninepatch/data/ninepatch_bubble.png
    :width: 320
    :alt: Example image
-   :target: https://raw.githubusercontent.com/vindolin/ninepatch/master/ninepatch/test/ninepatch_bubble.png
+   :target: https://raw.githubusercontent.com/vindolin/ninepatch/master/ninepatch/data/ninepatch_bubble.png
 
 Only the scalable guides are used, fill area guides are ignored.
