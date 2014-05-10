@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from distutils.core import setup
+from setuptools import setup
 
 setup(
     name='ninepatch',
@@ -13,4 +13,5 @@ setup(
     description='Slice and scale 9-patch images',
     long_description=open('README.rst').read(),
     install_requires=["pillow"],
+    include_package_data=True,
 )
