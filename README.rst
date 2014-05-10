@@ -6,13 +6,13 @@ Slice Android style 9-patch images into tiles and resize them into a scaled vers
    :alt: Travis CI
    :target: https://travis-ci.org/vindolin/ninepatch
 
+see https://developer.android.com/tools/help/draw9patch.html
 
 .. image:: https://raw.githubusercontent.com/vindolin/ninepatch/master/ninepatch/data/ninepatch_bubble.png
    :width: 320
    :alt: Example image
    :target: https://raw.githubusercontent.com/vindolin/ninepatch/master/ninepatch/data/ninepatch_bubble.png
 
-see https://developer.android.com/tools/help/draw9patch.html
 
 Python usage
 ------------
