@@ -17,13 +17,22 @@ if __name__ == '__main__':
 
     img = None
 
+    border = 20
+
     def resize(event):
         global img
         root.title(title)
         try:
-            scaled_image = ninepatch.render(int(event.width * 0.9), int(event.height * 0.9))
+            scaled_image = ninepatch.render(event.width - border * 2, event.height - border * 2)
             img = ImageTk.PhotoImage(scaled_image)
-            canvas.create_image(event.width / 2, event.height / 2, anchor=tk.CENTER, image=img)
+            canvas.delete("all")
+            canvas.create_image(border, border, anchor=tk.NW, image=img)
+            canvas.create_rectangle((
+                border + ninepatch.fill_area[0][0],
+                border + ninepatch.fill_area[0][1],
+                event.width - border - ninepatch.fill_area[1][0],
+                event.height - border - ninepatch.fill_area[1][1],
+            ), dash=(3, 6), outline='black')
         except ScaleError, e:
             root.title(e)
 
@@ -33,7 +42,6 @@ if __name__ == '__main__':
     root.title(title)
     canvas = tk.Canvas(root, width=int(ninepatch.image.size[0] * 1.5), height=int(ninepatch.image.size[1] * 1.5), bg='#BBB')
     canvas.pack(fill=tk.BOTH, expand=tk.YES)
-    canvas.create_image(1, 1, image=img)
     canvas.bind('<Configure>', resize)
 
     root.mainloop()

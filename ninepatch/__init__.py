@@ -20,7 +20,21 @@ class Ninepatch(object):
 
     def __init__(self, filename):
         self.image = Image.open(filename)
-        self.tiles = self.slice()
+        self.marks = self.find_marks(self.image)
+        self.slice_data = self.slice()
+
+    @property
+    def fill_area(self):
+        return (
+            (
+                self.marks['fill']['x'][0],  # left
+                self.marks['fill']['y'][0]  # top
+            ),
+            (
+                self.image.size[0] - self.marks['fill']['x'][1],  # right
+                self.image.size[1] - self.marks['fill']['y'][1]  # bottom
+            ),
+        )
 
     @staticmethod
     def _chain(marks):
@@ -32,35 +46,61 @@ class Ninepatch(object):
         '''find the cut marks'''
         pixels = image.load()
 
-        marks = {'x': [], 'y': []}
+        scale_marks = {'x': [], 'y': []}
+        fill_marks = {'x': [], 'y': []}
+        axes = {'x': 0, 'y': 1}
 
         marker_color = (0, 0, 0, 255)
 
-        for axis_i, axis in enumerate(('x', 'y')):
-            start_mark = end_mark = None
+        for axis in axes.keys():
+            start_scale_mark = end_scale_mark = None
+            start_fill_mark = end_fill_mark = None
 
-            coord = [0, 0]  # our handle to rotate the axes
+            scale_coord = [0, 0]  # our handle to rotate the axes
+            fill_coord = [0, 0]
+
+            # last pixel on that axis
+            fill_coord[axes[axis] - 1] = image.size[not axes[axis]] - 1
 
             # iterate over the first pixels on that axis
-            for i in range(image.size[axis_i]):
-                coord[axis_i] = i  # select axis to search
-                pixel = pixels[tuple(coord)]
+            for i in range(image.size[axes[axis]]):
+                scale_coord[axes[axis]] = i  # select axis to search
+                fill_coord[axes[axis]] = i
 
-                if pixel == marker_color:
-                    if not start_mark:
-                        start_mark = i
-                    end_mark = i
+                scale_pixel = pixels[tuple(scale_coord)]
+                fill_pixel = pixels[tuple(fill_coord)]
+
+                # scale marks
+                if scale_pixel == marker_color:
+                    if not start_scale_mark:
+                        start_scale_mark = i
+                    end_scale_mark = i
 
                 else:
-                    if start_mark:
-                        marks[axis].append((start_mark, end_mark))
-                        start_mark = end_mark = None
+                    if start_scale_mark:
+                        scale_marks[axis].append(
+                            (start_scale_mark, end_scale_mark))
+                        start_scale_mark = end_scale_mark = None
 
-        return marks
+                # fill marks
+                if fill_pixel == marker_color:
+                    if not start_fill_mark:
+                        start_fill_mark = i
+                    end_fill_mark = i
+                else:
+                    if start_fill_mark:
+                        fill_marks[axis] = (start_fill_mark, end_fill_mark - 1)
+
+        return {
+            'scale': scale_marks,
+            'fill': fill_marks,
+        }
 
     def slice(self):
         '''slice a 9 patch image'''
-        marks = self.find_marks(self.image)
+        self.find_marks(self.image)['scale']
+
+        slice_data = {}
 
         slice_marks = {
             'x': [],
@@ -72,7 +112,7 @@ class Ninepatch(object):
         }
         for axis in ('x', 'y'):
             slice_marks[axis] = [1] + list(
-                self._chain(marks[axis])) + [image_size[axis]]
+                self._chain(self.marks['scale'][axis])) + [image_size[axis] - 1]
 
         counts = {
             'x': len(slice_marks['x']) - 1,
@@ -91,15 +131,17 @@ class Ninepatch(object):
                     slice_marks['y'][y + 1],
                 ))
 
-        self.tile_count = {
+        slice_data['tiles'] = tiles
+
+        slice_data['tile_count'] = {
             'x': len(tiles) - 1,
             'y': len(tiles[0]) - 1,
         }
-        self.scaleable_tile_count = {
-            'x': float(self.tile_count['x']) / 2,
-            'y': float(self.tile_count['y']) / 2,
+        slice_data['scaleable_tile_count'] = {
+            'x': float(slice_data['tile_count']['x']) / 2,
+            'y': float(slice_data['tile_count']['y']) / 2,
         }
-        self.fixed_tile_size = {
+        slice_data['fixed_tile_size'] = {
             'x': 0,
             'y': 0,
         }
@@ -108,17 +150,19 @@ class Ninepatch(object):
         for x, column in enumerate(tiles):
             for y, tile in enumerate(column):
                 if y == 0 and is_even(x):  # only on first row
-                    self.fixed_tile_size['x'] += tile.size[0]
+                    slice_data['fixed_tile_size']['x'] += tile.size[0]
                 if x == 0 and is_even(y):  # only on first column
-                    self.fixed_tile_size['y'] += tile.size[1]
+                    slice_data['fixed_tile_size']['y'] += tile.size[1]
 
         # add 1 pixel for every scalable region
-        self.min_scale_size = {
-            'x': self.fixed_tile_size['x'] + self.scaleable_tile_count['x'],
-            'y': self.fixed_tile_size['y'] + self.scaleable_tile_count['y'],
+        slice_data['min_scale_size'] = {
+            'x': slice_data['fixed_tile_size']['x']
+            + slice_data['scaleable_tile_count']['x'],
+            'y': slice_data['fixed_tile_size']['y']
+            + slice_data['scaleable_tile_count']['y'],
         }
 
-        return tiles
+        return slice_data
 
     @staticmethod
     def distributor(start):
@@ -136,28 +180,30 @@ class Ninepatch(object):
         # all the even tiles are the ones that can be scaled
 
         # raise error when undersized
-        if width < self.min_scale_size['x']:
+        if width < self.slice_data['min_scale_size']['x']:
             raise ScaleError('width cannot be smaller than %i' %
-                             self.min_scale_size['x'])
+                             self.slice_data['min_scale_size']['x'])
 
-        if height < self.min_scale_size['y']:
+        if height < self.slice_data['min_scale_size']['y']:
             raise ScaleError('height cannot be smaller than %i' %
-                             self.min_scale_size['y'])
+                             self.slice_data['min_scale_size']['y'])
 
         total_scale = {
-            'x': width - self.fixed_tile_size['x'],
-            'y': height - self.fixed_tile_size['y'],
+            'x': width - self.slice_data['fixed_tile_size']['x'],
+            'y': height - self.slice_data['fixed_tile_size']['y'],
         }
         tile_scale = {
-            'x': int(total_scale['x'] / self.scaleable_tile_count['x']),
-            'y': int(total_scale['y'] / self.scaleable_tile_count['y']),
+            'x': int(
+                total_scale['x'] / self.slice_data['scaleable_tile_count']['x']),
+            'y': int(
+                total_scale['y'] / self.slice_data['scaleable_tile_count']['y']),
         }
         # rounding differences
         extra = {
-            'x': total_scale['x'] - (tile_scale['x'] *
-                                     self.scaleable_tile_count['x']),
-            'y': total_scale['y'] - (tile_scale['y'] *
-                                     self.scaleable_tile_count['y']),
+            'x': total_scale['x'] - (
+                tile_scale['x'] * self.slice_data['scaleable_tile_count']['x']),
+            'y': total_scale['y'] - (
+                tile_scale['y'] * self.slice_data['scaleable_tile_count']['y']),
         }
 
         # distributes the pixels from the rounding differences until exhausted
@@ -166,7 +212,7 @@ class Ninepatch(object):
         x_coord = 0
         y_coord = 0
 
-        for x, column in enumerate(self.tiles):
+        for x, column in enumerate(self.slice_data['tiles']):
             extra_x = 0 if is_even(x) else next(extra_x_distributor)
             extra_y_distributor = Ninepatch.distributor(extra['y'])
 
