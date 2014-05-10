@@ -68,11 +68,9 @@ TODO
 
 Validate Image and show user errors
 
-See the example/unittest image:
+See the example/unittest image for a valid example image:
 
 .. image:: https://raw.githubusercontent.com/vindolin/ninepatch/master/ninepatch/data/ninepatch_bubble.png
    :width: 320
    :alt: Example image
    :target: https://raw.githubusercontent.com/vindolin/ninepatch/master/ninepatch/data/ninepatch_bubble.png
-
-Only the scalable guides are used, fill area guides are ignored.
