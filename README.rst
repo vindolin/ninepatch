@@ -47,6 +47,8 @@ Changelog
 ---------
 0.1.4
   added Tkinter viewer
+0.1.5
+  minor bugfix
 
 Notes
 -----
