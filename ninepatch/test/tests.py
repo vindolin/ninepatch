@@ -15,7 +15,7 @@ class TestNinepatch(unittest.TestCase):
 
         # copy package resourc into temp file
         original_image_temp_path = os.path.join(tempfile.gettempdir(), 'original_image_temp.png')
-        with open(original_image_temp_path, 'w') as original_image_temp:
+        with open(original_image_temp_path, 'wb') as original_image_temp:
             original_image_temp.write(original_image.read())
 
         scaled_image_path = tempfile.gettempdir() + os.sep + 'test_scaled_421_333.png'
