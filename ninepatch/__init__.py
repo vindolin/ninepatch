@@ -24,6 +24,10 @@ class Ninepatch(object):
         self.slice_data = self.slice()
 
     @property
+    def min_scale_size(self):
+        return self.slice_data['min_scale_size']
+
+    @property
     def fill_area(self):
         return (
             (

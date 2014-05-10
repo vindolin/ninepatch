@@ -46,11 +46,9 @@ There's also a Tkinter viewer you can use to preview your 9-patch images:
 
 Changelog
 ---------
-0.1.6
+0.1.7
   * parse the fill area
   * switched to setuptools
-0.1.5
-  * minor bugfix
 0.1.4
   * added Tkinter viewer
 
