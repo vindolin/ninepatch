@@ -1,5 +1,5 @@
-Slice Android style 9-patch images into tiles and resize them into a scaled version
------------------------------------------------------------------------------------
+Slice Android style 9-patch images into tiles, resize and interactively preview them.
+-------------------------------------------------------------------------------------
 
 .. image:: https://travis-ci.org/vindolin/ninepatch.svg?branch=master
    :width: 90
@@ -26,22 +26,23 @@ Python usage
 
 Command line usage
 ------------------
-Your image must be a png image with a transparent background. The scale
-guide color must be 100% opaque black.
+Your image must be a PNG image with a transparent background.
+The scale and fill guide color must be 100% opaque black.
 
-open the scaled image in a viewer
+Open the scaled image in a viewer
 
 ::
 
     $ ninepatch 9patch_test.png 300 300
 
-save the scaled image to a new file
+Save the scaled image to a new file
 
 ::
 
     $ ninepatch 9patch_test.png 300 300 scaled.png
 
-There's also a Tkinter viewer you can use to interactively preview your 9-patch images:
+
+Interactively resize and preview an image in a Tkinter viewer.
 
 ::
 
