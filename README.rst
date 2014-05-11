@@ -56,6 +56,8 @@ You can reinstall with: "pip install -I ninepatch" after fixing this.
 
 Changelog
 ---------
+0.1.10
+  * missing guides are now handled properly
 0.1.9
   * parse the fill area
   * switched to setuptools
@@ -74,5 +76,4 @@ Issues
 
 TODO
 ----
-Validate Image and show user errors
-
+...
