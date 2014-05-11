@@ -40,6 +40,9 @@ if __name__ == '__main__':
 
     root = tk.Tk()
     root.title(title)
+
+    root.bind('<Escape>', lambda e: root.destroy())
+
     canvas = tk.Canvas(root, width=int(ninepatch.image.size[0] * 1.5), height=int(ninepatch.image.size[1] * 1.5), bg='#BBB')
     canvas.pack(fill=tk.BOTH, expand=tk.YES)
     canvas.bind('<Configure>', resize)
