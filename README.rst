@@ -6,7 +6,7 @@ Slice Android style 9-patch images into tiles, resize and interactively preview 
    :alt: Travis CI
    :target: https://travis-ci.org/vindolin/ninepatch
 
-see https://developer.android.com/tools/help/draw9patch.html
+See https://developer.android.com/tools/help/draw9patch.html for a 9-patch description.
 
 .. image:: https://raw.githubusercontent.com/vindolin/ninepatch/master/ninepatch/data/ninepatch_bubble.png
    :width: 320
@@ -29,20 +29,20 @@ Command line usage
 Your image must be a PNG image with a transparent background.
 The scale and fill guide color must be 100% opaque black.
 
-Open the scaled image in a viewer
+Open the scaled image in a viewer:
 
 ::
 
     $ ninepatch 9patch_test.png 300 300
 
-Save the scaled image to a new file
+Save the scaled image to a new file:
 
 ::
 
     $ ninepatch 9patch_test.png 300 300 scaled.png
 
 
-Interactively resize and preview an image in a Tkinter viewer.
+Interactively resize and preview an image in a Tkinter viewer:
 
 ::
 
@@ -67,8 +67,7 @@ Changelog
 
 Notes
 -----
-You can see the module in action in the ninepatch\_actor.py from my
-Clutter example project:
+I wrote this tool for the ninepatch\_actor.py in my Clutter example project:
 https://github.com/vindolin/Clutter-Python-examples
 
 Issues
