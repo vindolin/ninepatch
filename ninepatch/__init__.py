@@ -1,7 +1,5 @@
 #!/usr/bin/env python
-
 from PIL import Image
-
 
 __all__ = ['Ninepatch', 'ScaleError']
 
@@ -29,6 +27,9 @@ class Ninepatch(object):
 
     @property
     def fill_area(self):
+        if self.marks['fill']['x'] == [] or self.marks['fill']['y'] == []:
+            return None
+
         return (
             (
                 self.marks['fill']['x'][0],  # left
@@ -102,8 +103,6 @@ class Ninepatch(object):
 
     def slice(self):
         '''slice a 9 patch image'''
-        self.find_marks(self.image)['scale']
-
         slice_data = {}
 
         slice_marks = {
@@ -169,12 +168,18 @@ class Ninepatch(object):
         return slice_data
 
     @staticmethod
-    def distributor(start):
+    def _distributor(start):
         '''decrement start and yield 1 until it is exhausted, then yield 0'''
         n = start
         while True:
             yield 1 if n > 0 else 0
             n -= 1
+
+    def _tile_scale(self, total_scale, scaleable_tile_count):
+        if scaleable_tile_count > 0:
+            return int(total_scale / scaleable_tile_count)
+        else:
+            return 0
 
     def render(self, width, height, filter=Image.ANTIALIAS):
         '''render the sliced tiles to a new scaled image'''
@@ -197,10 +202,10 @@ class Ninepatch(object):
             'y': height - self.slice_data['fixed_tile_size']['y'],
         }
         tile_scale = {
-            'x': int(
-                total_scale['x'] / self.slice_data['scaleable_tile_count']['x']),
-            'y': int(
-                total_scale['y'] / self.slice_data['scaleable_tile_count']['y']),
+            'x': self._tile_scale(
+                total_scale['x'], self.slice_data['scaleable_tile_count']['x']),
+            'y': self._tile_scale(
+                total_scale['y'], self.slice_data['scaleable_tile_count']['y']),
         }
         # rounding differences
         extra = {
@@ -211,17 +216,16 @@ class Ninepatch(object):
         }
 
         # distributes the pixels from the rounding differences until exhausted
-        extra_x_distributor = Ninepatch.distributor(extra['x'])
+        extra_x__distributor = Ninepatch._distributor(extra['x'])
 
-        x_coord = 0
-        y_coord = 0
+        x_coord = y_coord = 0
 
         for x, column in enumerate(self.slice_data['tiles']):
-            extra_x = 0 if is_even(x) else next(extra_x_distributor)
-            extra_y_distributor = Ninepatch.distributor(extra['y'])
+            extra_x = 0 if is_even(x) else next(extra_x__distributor)
+            extra_y__distributor = Ninepatch._distributor(extra['y'])
 
             for y, tile in enumerate(column):
-                extra_y = 0 if is_even(y) else next(extra_y_distributor)
+                extra_y = 0 if is_even(y) else next(extra_y__distributor)
 
                 if y == 0:
                     y_coord = 0  # reset y_coord
