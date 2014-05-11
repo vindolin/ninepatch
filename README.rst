@@ -29,7 +29,7 @@ Command line usage
 Your image must be a PNG image with a transparent background.
 The scale and fill guide color must be 100% opaque black.
 
-Open the scaled image in a viewer:
+Scale and open image in a viwer (PIL image.show()):
 
 ::
 
