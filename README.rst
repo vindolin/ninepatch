@@ -48,6 +48,13 @@ Interactively resize and preview an image in a Tkinter viewer:
 
     $ ninepatch_viewer 9patch_test.png
 
+    or just:
+
+    $ ninepatch_viewer
+
+    without arguments to see the demo image
+
+
 If you want to use the viewer then python-pil.imagetk has to be installed.
 
 On Ubuntu do:
