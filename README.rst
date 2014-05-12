@@ -68,7 +68,7 @@ If you want to install into a virtualenv, pip needs the following packages to co
 
 ::
 
-   $  sudo apt-get install pyhton-tk tk8.6-dev
+   $  sudo apt-get install python-tk tk8.6-dev
 
 (You can trigger a recompile of PIL with: "pip install -I ninepatch")
 
