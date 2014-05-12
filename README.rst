@@ -42,6 +42,12 @@ Save the scaled image to a new file:
     $ ninepatch 9patch_test.png 300 300 scaled.png
 
 
+.. image:: https://raw.githubusercontent.com/vindolin/ninepatch/master/ninepatch/data/ninepatch_viewer_screenshot.png
+   :width: 419
+   :alt: ninepatch viewer screenshot
+   :target: https://raw.githubusercontent.com/vindolin/ninepatch/master/ninepatch/data/ninepatch_viewer_screenshot.png
+
+
 Interactively resize and preview an image in a Tkinter viewer:
 
 ::
