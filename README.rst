@@ -29,7 +29,7 @@ Command line usage
 Your image must be a PNG image with a transparent background.
 The scale and fill guide color must be 100% opaque black.
 
-Scale and open image in a viwer (PIL image.show()):
+Scale and open image in a viewer (PIL image.show()):
 
 ::
 
@@ -48,11 +48,22 @@ Interactively resize and preview an image in a Tkinter viewer:
 
     $ ninepatch_viewer 9patch_test.png
 
-tk8.5-dev has to be installed before installing with pip.
+If you want to use the viewer then python-pil.imagetk has to be installed.
 
-Ubuntu: sudo apt-get install tk8.5-dev
+On Ubuntu do:
 
-You can reinstall with: "pip install -I ninepatch" after fixing this.
+::
+
+  $ sudo apt-get install python-pil.imagetk
+
+
+If you want to install into a virtualenv, pip needs the following packages to compile PIL with Tkinter support:
+
+::
+
+   $  sudo apt-get install pyhton-tk tk8.6-dev
+
+(You can trigger a recompile of PIL with: "pip install -I ninepatch")
 
 
 Changelog
