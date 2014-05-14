@@ -20,7 +20,7 @@ If you want to use the interactive viewer read the additional installation notes
 
 ::
 
-    $ pin install
+    $ pin install ninepatch
 
 Python usage
 ------------
