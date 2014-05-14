@@ -13,6 +13,14 @@ See https://developer.android.com/tools/help/draw9patch.html for a 9-patch descr
    :alt: Example image
    :target: https://raw.githubusercontent.com/vindolin/ninepatch/master/ninepatch/data/ninepatch_bubble.png
 
+Installation
+------------
+
+If you want to use the interactive viewer read the additional installation notes under "Interactive viewer".
+
+::
+
+    $ pin install
 
 Python usage
 ------------
@@ -23,6 +31,7 @@ Python usage
     ninepatch = Ninepatch('9patch_test.png')
     print(ninepatch.fill_area)  # (left, top, right, bottom)
     scaled_image = ninepatch.render(500, 400) # creates a new PIL image
+
 
 Command line usage
 ------------------
