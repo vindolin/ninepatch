@@ -1,4 +1,4 @@
-Slice Android style 9-patch images into tiles, resize and interactively preview them.
+Slice Android style 9-patch images, resize and interactively preview them.
 -------------------------------------------------------------------------------------
 
 .. image:: https://travis-ci.org/vindolin/ninepatch.svg?branch=master
