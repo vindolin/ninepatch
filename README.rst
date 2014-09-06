@@ -100,6 +100,9 @@ If you want to install into a virtualenv, pip needs the following packages to co
 
 Changelog
 ---------
+0.1.11
+  * new method export_slices()
+  * changed command line parameters (render/slice)
 0.1.10
   * missing guides are now handled properly
 0.1.9
