@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 from PIL import Image
 import os
+import re
 
 __all__ = ['Ninepatch', 'ScaleError']
 
@@ -293,7 +294,8 @@ class Ninepatch(object):
 
     def export_slices(self, path):
         '''export slices as PNG images into a directory'''
-        file_prefix = os.path.basename(self.filename).rpartition('.')[0]
+        file_prefix = os.path.basename(self.filename)
+        file_prefix = re.match('(.*)\.9\.png', file_prefix).groups()[0]
         for x, column in enumerate(self.slice_data['tiles']):
             for y, tile in enumerate(column):
                 tile = self.compress_tile(tile)

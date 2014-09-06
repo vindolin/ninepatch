@@ -10,7 +10,7 @@ import ninepatch
 class TestNinepatch(unittest.TestCase):
     def test_ninepatch(self):
         # compare with the test image
-        test_image = pkg_resources.resource_stream('ninepatch', 'data/9patch_test.png')
+        test_image = pkg_resources.resource_stream('ninepatch', 'data/9patch_test.9.png')
         original_image = pkg_resources.resource_stream('ninepatch', 'data/test_original_421_333.png')
 
         # copy package resourc into temp file

@@ -11,7 +11,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     if args.image_filename == 'DEMO_IMAGE':
-        args.image_filename = pkg_resources.resource_stream('ninepatch', 'data/ninepatch_bubble.png')
+        args.image_filename = pkg_resources.resource_stream('ninepatch', 'data/ninepatch_bubble.9.png')
 
     ninepatch = Ninepatch(args.image_filename)
 

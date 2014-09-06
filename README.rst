@@ -8,10 +8,10 @@ Slice Android style 9-patch images, resize and interactively preview them.
 
 See https://developer.android.com/tools/help/draw9patch.html for a 9-patch description.
 
-.. image:: https://raw.githubusercontent.com/vindolin/ninepatch/master/ninepatch/data/ninepatch_bubble.png
+.. image:: https://raw.githubusercontent.com/vindolin/ninepatch/master/ninepatch/data/ninepatch_bubble.9.png
    :width: 320
    :alt: Example image
-   :target: https://raw.githubusercontent.com/vindolin/ninepatch/master/ninepatch/data/ninepatch_bubble.png
+   :target: https://raw.githubusercontent.com/vindolin/ninepatch/master/ninepatch/data/ninepatch_bubble.9.png
 
 Installation
 ------------
@@ -28,7 +28,7 @@ Python usage
 
 
     from ninepatch import Ninepatch
-    ninepatch = Ninepatch('9patch_test.png')
+    ninepatch = Ninepatch('9patch_test.9.png')
     print(ninepatch.fill_area)  # (left, top, right, bottom)
     scaled_image = ninepatch.render(500, 400) # creates a new PIL image
 
@@ -42,19 +42,19 @@ Scale and open image in a viewer (PIL image.show()):
 
 ::
 
-    $ ninepatch render 9patch_test.png 300 300
+    $ ninepatch render 9patch_test.9.png 300 300
 
 Save the scaled image to a new file:
 
 ::
 
-    $ ninepatch render 9patch_test.png 300 300 scaled.png
+    $ ninepatch render 9patch_test.9.png 300 300 scaled.png
 
 Slice the 9patch into tiles:
 
 ::
 
-    $ ninepatch slice 9patch_test.png ./outputdir
+    $ ninepatch slice 9patch_test.9.png ./outputdir
 
 
 Interactive viewer
@@ -71,7 +71,7 @@ Interactively resize and preview an image in a Tkinter viewer:
 
 ::
 
-    $ ninepatch_viewer 9patch_test.png
+    $ ninepatch_viewer 9patch_test.9.png
 
     or just:
 
@@ -100,7 +100,7 @@ If you want to install into a virtualenv, pip needs the following packages to co
 
 Changelog
 ---------
-0.1.11
+0.1.12
   * new method export_slices()
   * changed command line parameters (render/slice)
 0.1.10
