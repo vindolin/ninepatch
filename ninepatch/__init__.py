@@ -251,3 +251,49 @@ class Ninepatch(object):
             x_coord += tile.size[0]
 
         return scaled_image
+
+    def _column(self, image, pixels, x):
+        return [pixels[(x, y)] for y in range(image.size[1])]
+
+    def _row(self, image, pixels, y):
+        return [pixels[(x, y)] for x in range(image.size[0])]
+
+    def compress_tile(self, tile):
+        '''look if pixels are repeated on one or two axes and compress the tile'''
+        pixels = tile.load()
+
+        x_compress = True
+        y_compress = True
+
+        first_column = self._column(tile, pixels, 0)
+        first_row = self._column(tile, pixels, 0)
+
+        for x in range(tile.size[0]):
+            pixel_column = self._column(tile, pixels, x)
+            if pixel_column != first_column:
+                x_compress = False
+
+        for y in range(tile.size[1]):
+            pixel_row = self._row(tile, pixels, y)
+            if pixel_row != first_row:
+                y_compress = False
+
+        if x_compress or y_compress:
+            width = 1 if x_compress else tile.size[0]
+            height = 1 if y_compress else tile.size[1]
+
+            compressed_tile = Image.new('RGBA', (width, height), None)
+            compressed_tile.paste(tile.crop((0, 0, width, height)))
+
+            return compressed_tile
+
+        return tile
+
+    def export_slices(self, path):
+        '''export slices as PNG images into a directory'''
+        for x, column in enumerate(self.slice_data['tiles']):
+            for y, tile in enumerate(column):
+                tile = self.compress_tile(tile)
+                slice_image = Image.new('RGBA', (tile.size[0], tile.size[1]), None)
+                slice_image.paste(tile)
+                slice_image.save('{}/{}_{}.png'.format(path, x, y))

@@ -1,0 +1,14 @@
+#!/usr/bin/env python
+
+from ninepatch import Ninepatch
+
+if __name__ == '__main__':
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument('source_filename')
+    parser.add_argument('target_path', nargs='?')
+    args = parser.parse_args()
+
+    ninepatch = Ninepatch(args.source_filename)
+
+    scaled_image = ninepatch.export_slices(args.target_path)
