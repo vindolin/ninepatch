@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 from PIL import Image
+import os
 
 __all__ = ['Ninepatch', 'ScaleError']
 
@@ -17,6 +18,7 @@ is_even = lambda value: value % 2 == 0
 class Ninepatch(object):
 
     def __init__(self, filename):
+        self.filename = filename
         self.image = Image.open(filename)
         self.marks = self.find_marks(self.image)
         self.slice_data = self.slice()
@@ -291,9 +293,10 @@ class Ninepatch(object):
 
     def export_slices(self, path):
         '''export slices as PNG images into a directory'''
+        file_prefix = os.path.basename(self.filename).rpartition('.')[0]
         for x, column in enumerate(self.slice_data['tiles']):
             for y, tile in enumerate(column):
                 tile = self.compress_tile(tile)
                 slice_image = Image.new('RGBA', (tile.size[0], tile.size[1]), None)
                 slice_image.paste(tile)
-                slice_image.save('{}/{}_{}.png'.format(path, x, y))
+                slice_image.save('{}/{}_{}_{}.png'.format(path, file_prefix, x, y))
