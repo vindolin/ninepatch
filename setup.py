@@ -7,7 +7,7 @@ setup(
     author='Thomas Schüßler',
     author_email='vindolin@gmail.com',
     packages=['ninepatch'],
-    scripts=['bin/ninepatch', 'bin/ninepatch_slicer', 'bin/ninepatch_viewer'],
+    scripts=['bin/ninepatch', 'bin/ninepatch_viewer'],
     url='https://github.com/vindolin/ninepatch',
     license=open('LICENSE').read(),
     description='Slice and scale 9-patch images',

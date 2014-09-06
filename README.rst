@@ -42,13 +42,19 @@ Scale and open image in a viewer (PIL image.show()):
 
 ::
 
-    $ ninepatch 9patch_test.png 300 300
+    $ ninepatch render 9patch_test.png 300 300
 
 Save the scaled image to a new file:
 
 ::
 
-    $ ninepatch 9patch_test.png 300 300 scaled.png
+    $ ninepatch render 9patch_test.png 300 300 scaled.png
+
+Slice the 9patch into tiles:
+
+::
+
+    $ ninepatch slice 9patch_test.png ./outputdir
 
 
 Interactive viewer
