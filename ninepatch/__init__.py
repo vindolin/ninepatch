@@ -21,11 +21,32 @@ is_even = lambda value: value % 2 == 0
 
 class Ninepatch(object):
 
-    def __init__(self, filename):
+    slice_cache = {}
+    render_cache = {}
+
+    @classmethod
+    def get_cache_size(cls):
+        #return sys.getsizeof(cls.slice_cache), sys.getsizeof(cls.render_cache)
+        return cls.render_cache
+
+    def __init__(self, filename, cache=False):
         self.filename = filename
-        self.image = Image.open(filename)
-        self.marks = self.find_marks(self.image)
-        self.slice_data = self.slice()
+
+        if filename in self.slice_cache:
+            self.image_size = self.slice_cache[filename]['image_size']
+            self.slice_data = self.slice_cache[filename]['slice_data']
+            self.marks = self.slice_cache[filename]['marks']
+        else:
+            self.image = Image.open(filename)
+            self.image_size = self.image.size
+            self.marks = self.find_marks(self.image)
+            self.slice_data = self.slice()
+
+            self.slice_cache[filename] = {
+                'image_size': self.image_size,
+                'slice_data': self.slice_data,
+                'marks': self.marks,
+            }
 
     @property
     def min_scale_size(self):
@@ -50,12 +71,12 @@ class Ninepatch(object):
 
         return (
             (
-                self.marks['fill']['x'][0],  # left
-                self.marks['fill']['y'][0]  # top
+                self.marks['fill']['x'][0] - 1,  # left
+                self.marks['fill']['y'][0] - 1,  # top
             ),
             (
-                self.image.size[0] - self.marks['fill']['x'][1],  # right
-                self.image.size[1] - self.marks['fill']['y'][1]  # bottom
+                self.image_size[0] - self.marks['fill']['x'][1] - 2,  # right
+                self.image_size[1] - self.marks['fill']['y'][1] - 2,  # bottom
             ),
         )
 
@@ -177,10 +198,8 @@ class Ninepatch(object):
 
         # add 1 pixel for every scalable region
         slice_data['min_scale_size'] = {
-            'x': slice_data['fixed_tile_size']['x']
-            + slice_data['scaleable_tile_count']['x'],
-            'y': slice_data['fixed_tile_size']['y']
-            + slice_data['scaleable_tile_count']['y'],
+            'x': slice_data['fixed_tile_size']['x'] + slice_data['scaleable_tile_count']['x'],
+            'y': slice_data['fixed_tile_size']['y'] + slice_data['scaleable_tile_count']['y'],
         }
 
         return slice_data
@@ -199,74 +218,74 @@ class Ninepatch(object):
         else:
             return 0
 
-    def render(self, width, height, filter=Image.ANTIALIAS):
+    def render(self, width, height, filter=Image.ANTIALIAS, cache=False):
         '''render the sliced tiles to a new scaled image'''
+        cache_hash = '{} {} {}'.format(width, height, self.filename)
+        if cache and cache_hash in self.render_cache:
+            scaled_image = self.render_cache[cache_hash]
+        else:
+            scaled_image = Image.new('RGBA', (width, height), None)
 
-        scaled_image = Image.new('RGBA', (width, height), None)
+            # all the even tiles are the ones that can be scaled
 
-        # all the even tiles are the ones that can be scaled
+            # raise error when undersized
+            if width < self.slice_data['min_scale_size']['x']:
+                raise ScaleError('width cannot be smaller than %i'
+                                 % self.slice_data['min_scale_size']['x'])
 
-        # raise error when undersized
-        if width < self.slice_data['min_scale_size']['x']:
-            raise ScaleError('width cannot be smaller than %i' %
-                             self.slice_data['min_scale_size']['x'])
+            if height < self.slice_data['min_scale_size']['y']:
+                raise ScaleError('height cannot be smaller than %i'
+                                 % self.slice_data['min_scale_size']['y'])
 
-        if height < self.slice_data['min_scale_size']['y']:
-            raise ScaleError('height cannot be smaller than %i' %
-                             self.slice_data['min_scale_size']['y'])
+            total_scale = {
+                'x': width - self.slice_data['fixed_tile_size']['x'],
+                'y': height - self.slice_data['fixed_tile_size']['y'],
+            }
+            tile_scale = {
+                'x': self._tile_scale(total_scale['x'], self.slice_data['scaleable_tile_count']['x']),
+                'y': self._tile_scale(total_scale['y'], self.slice_data['scaleable_tile_count']['y']),
+            }
+            # rounding differences
+            extra = {
+                'x': total_scale['x'] - (tile_scale['x'] * self.slice_data['scaleable_tile_count']['x']),
+                'y': total_scale['y'] - (tile_scale['y'] * self.slice_data['scaleable_tile_count']['y']),
+            }
 
-        total_scale = {
-            'x': width - self.slice_data['fixed_tile_size']['x'],
-            'y': height - self.slice_data['fixed_tile_size']['y'],
-        }
-        tile_scale = {
-            'x': self._tile_scale(
-                total_scale['x'], self.slice_data['scaleable_tile_count']['x']),
-            'y': self._tile_scale(
-                total_scale['y'], self.slice_data['scaleable_tile_count']['y']),
-        }
-        # rounding differences
-        extra = {
-            'x': total_scale['x'] - (
-                tile_scale['x'] * self.slice_data['scaleable_tile_count']['x']),
-            'y': total_scale['y'] - (
-                tile_scale['y'] * self.slice_data['scaleable_tile_count']['y']),
-        }
+            # distributes the pixels from the rounding differences until exhausted
+            extra_x_distributor = Ninepatch._distributor(extra['x'])
 
-        # distributes the pixels from the rounding differences until exhausted
-        extra_x__distributor = Ninepatch._distributor(extra['x'])
+            x_coord = y_coord = 0
 
-        x_coord = y_coord = 0
+            for x, column in enumerate(self.slice_data['tiles']):
+                extra_x = 0 if is_even(x) else next(extra_x_distributor)
+                extra_y_distributor = Ninepatch._distributor(extra['y'])
 
-        for x, column in enumerate(self.slice_data['tiles']):
-            extra_x = 0 if is_even(x) else next(extra_x__distributor)
-            extra_y__distributor = Ninepatch._distributor(extra['y'])
+                for y, tile in enumerate(column):
+                    extra_y = 0 if is_even(y) else next(extra_y_distributor)
 
-            for y, tile in enumerate(column):
-                extra_y = 0 if is_even(y) else next(extra_y__distributor)
+                    if y == 0:
+                        y_coord = 0  # reset y_coord
 
-                if y == 0:
-                    y_coord = 0  # reset y_coord
+                    if is_even(x) and is_even(y):
+                        pass  # use tile as is
+                    elif is_even(x):  # scale y
+                        tile = tile.resize((tile.size[0], tile_scale['y'] + extra_y), image_filter)
+                    elif is_even(y):  # scale x
+                        tile = tile.resize((tile_scale['x'] + extra_x, tile.size[1]), image_filter)
+                    else:  # scale both
+                        tile = tile.resize((
+                            tile_scale['x'] + extra_x,
+                            tile_scale['y'] + extra_y
+                        ), image_filter)
 
-                if is_even(x) and is_even(y):
-                    pass  # use tile as is
-                elif is_even(x):  # scale y
-                    tile = tile.resize(
-                        (tile.size[0], tile_scale['y'] + extra_y), filter)
-                elif is_even(y):  # scale x
-                    tile = tile.resize(
-                        (tile_scale['x'] + extra_x, tile.size[1]), filter)
-                else:  # scale both
-                    tile = tile.resize((
-                        tile_scale['x'] + extra_x,
-                        tile_scale['y'] + extra_y
-                    ), filter)
+                    scaled_image.paste(tile, (x_coord, y_coord))
 
-                scaled_image.paste(tile, (x_coord, y_coord))
+                    y_coord += tile.size[1]
 
-                y_coord += tile.size[1]
+                x_coord += tile.size[0]
 
-            x_coord += tile.size[0]
+            if cache:
+                self.render_cache[cache_hash] = scaled_image
 
         return scaled_image
 
