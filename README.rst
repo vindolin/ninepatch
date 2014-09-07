@@ -29,7 +29,7 @@ Python usage
 
     from ninepatch import Ninepatch
     ninepatch = Ninepatch('9patch_test.9.png')
-    print(ninepatch.fill_area)  # content_area(left=23, top=20, right=27, bottom=59)
+    print(ninepatch.content_area)  # content_area(left=23, top=20, right=27, bottom=59)
     scaled_image = ninepatch.render(500, 400) # creates a new PIL image
 
 
