@@ -3,7 +3,7 @@ from setuptools import setup
 
 setup(
     name='ninepatch',
-    version='0.1.16',
+    version='0.1.17',
     author='Thomas Schüßler',
     author_email='vindolin@gmail.com',
     packages=['ninepatch'],
