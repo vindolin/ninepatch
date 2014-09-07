@@ -56,6 +56,7 @@ Slice the 9patch into tiles:
 
     $ ninepatch slice 9patch_test.9.png ./outputdir
 
+.. image:: https://raw.githubusercontent.com/vindolin/ninepatch/master/ninepatch/data/slice_export.png.png
 
 Interactive viewer
 ------------------
