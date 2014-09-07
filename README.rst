@@ -50,6 +50,8 @@ Save the scaled image to a new file:
 
     $ ninepatch render 9patch_test.9.png 300 300 scaled.png
 
+.. image:: https://raw.githubusercontent.com/vindolin/ninepatch/master/ninepatch/data/ninepatch_bubble_300x300.png
+
 Slice the 9patch into tiles:
 
 ::
@@ -101,7 +103,7 @@ If you want to install into a virtualenv, pip needs the following packages to co
 
 Changelog
 ---------
-0.1.15
+0.1.16
   * new method export_slices()
   * changed command line parameters (render/slice)
 0.1.10
