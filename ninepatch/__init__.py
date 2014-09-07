@@ -42,11 +42,12 @@ class Ninepatch(object):
             self.marks = self.find_marks(self.image)
             self.slice_data = self.slice()
 
-            self.slice_cache[filename] = {
-                'image_size': self.image_size,
-                'slice_data': self.slice_data,
-                'marks': self.marks,
-            }
+            if cache:
+                self.slice_cache[filename] = {
+                    'image_size': self.image_size,
+                    'slice_data': self.slice_data,
+                    'marks': self.marks,
+                }
 
     @property
     def min_scale_size(self):

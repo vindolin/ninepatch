@@ -103,6 +103,8 @@ If you want to install into a virtualenv, pip needs the following packages to co
 
 Changelog
 ---------
+0.1.19
+  * fixed error in caching
 0.1.18
   * optional caching for slice() and render()
 0.1.17
