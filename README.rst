@@ -28,7 +28,7 @@ Python usage
 
 
     from ninepatch import Ninepatch
-    ninepatch = Ninepatch('9patch_test.9.png')
+    ninepatch = Ninepatch('ninepatch_bubble.9.png')
     print(ninepatch.content_area)  # content_area(left=23, top=20, right=27, bottom=59)
     scaled_image = ninepatch.render(500, 400) # creates a new PIL image
 
@@ -42,13 +42,13 @@ Scale and open image in a viewer (PIL image.show()):
 
 ::
 
-    $ ninepatch render 9patch_test.9.png 300 300
+    $ ninepatch render ninepatch_bubble.9.png 300 300
 
 Save the scaled image to a new file:
 
 ::
 
-    $ ninepatch render 9patch_test.9.png 300 300 scaled.png
+    $ ninepatch render ninepatch_bubble.9.png 300 300 scaled.png
 
 .. image:: https://raw.githubusercontent.com/vindolin/ninepatch/master/ninepatch/data/ninepatch_bubble_300x300.png
 
@@ -56,7 +56,7 @@ Slice the 9patch into tiles:
 
 ::
 
-    $ ninepatch slice 9patch_test.9.png ./outputdir
+    $ ninepatch slice ninepatch_bubble.9.png ./outputdir
 
 .. image:: https://raw.githubusercontent.com/vindolin/ninepatch/master/ninepatch/data/slice_export.png
 
@@ -74,7 +74,7 @@ Interactively resize and preview an image in a Tkinter viewer:
 
 ::
 
-    $ ninepatch_viewer 9patch_test.9.png
+    $ ninepatch_viewer ninepatch_bubble.9.png
 
     or just:
 
