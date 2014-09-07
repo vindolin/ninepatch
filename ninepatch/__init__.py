@@ -269,14 +269,14 @@ class Ninepatch(object):
                     if is_even(x) and is_even(y):
                         pass  # use tile as is
                     elif is_even(x):  # scale y
-                        tile = tile.resize((tile.size[0], tile_scale['y'] + extra_y), image_filter)
+                        tile = tile.resize((tile.size[0], tile_scale['y'] + extra_y), filter)
                     elif is_even(y):  # scale x
-                        tile = tile.resize((tile_scale['x'] + extra_x, tile.size[1]), image_filter)
+                        tile = tile.resize((tile_scale['x'] + extra_x, tile.size[1]), filter)
                     else:  # scale both
                         tile = tile.resize((
                             tile_scale['x'] + extra_x,
                             tile_scale['y'] + extra_y
-                        ), image_filter)
+                        ), filter)
 
                     scaled_image.paste(tile, (x_coord, y_coord))
 
