@@ -1,9 +1,12 @@
 #!/usr/bin/env python
 from PIL import Image
+from collections import namedtuple
 import os
 import re
 
 __all__ = ['Ninepatch', 'ScaleError']
+
+content_area = namedtuple('content_area', ['left', 'top', 'right', 'bottom'])
 
 
 class ScaleError(Exception):
@@ -29,6 +32,18 @@ class Ninepatch(object):
         return self.slice_data['min_scale_size']
 
     @property
+    def content_area(self):
+        if self.marks['fill']['x'] == [] or self.marks['fill']['y'] == []:
+            return None
+
+        return content_area(
+            self.marks['fill']['x'][0],
+            self.marks['fill']['y'][0],
+            self.image.size[0] - self.marks['fill']['x'][1],
+            self.image.size[1] - self.marks['fill']['y'][1],
+        )
+
+    @property  # DEPRECATED, use content_area
     def fill_area(self):
         if self.marks['fill']['x'] == [] or self.marks['fill']['y'] == []:
             return None
