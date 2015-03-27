@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import sys
+import json
 from ninepatch import Ninepatch
 
 if __name__ == '__main__':
@@ -38,4 +39,4 @@ if __name__ == '__main__':
 
     elif args.command == 'info':
         ninepatch = Ninepatch(args.source_filename)
-        sys.stdout.write('%s\n' % repr(ninepatch.marks))
+        sys.stdout.write('%s\n' % json.dumps(ninepatch.marks, indent=4, sort_keys=True))
