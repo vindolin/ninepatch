@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import sys
 from ninepatch import Ninepatch
 
 if __name__ == '__main__':
@@ -18,6 +19,9 @@ if __name__ == '__main__':
     parser_slice.add_argument('source_filename')
     parser_slice.add_argument('target_path', help='the directory where the slices should be saved')
 
+    parser_info = subparsers.add_parser('info', help='describe the marks in the 9patch using a JSON object')
+    parser_info.add_argument('source_filename')
+
     args = parser.parse_args()
 
     if args.command == 'render':
@@ -31,3 +35,7 @@ if __name__ == '__main__':
     elif args.command == 'slice':
         ninepatch = Ninepatch(args.source_filename)
         ninepatch.export_slices(args.target_path)
+
+    elif args.command == 'info':
+        ninepatch = Ninepatch(args.source_filename)
+        sys.stdout.write('%s\n' % repr(ninepatch.marks))
