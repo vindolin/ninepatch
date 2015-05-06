@@ -13,7 +13,7 @@ class TestNinepatch(unittest.TestCase):
         test_image = pkg_resources.resource_stream('ninepatch', 'data/9patch_test.9.png')
         original_image = pkg_resources.resource_stream('ninepatch', 'data/test_original_421_333.png')
 
-        # copy package resourc into temp file
+        # copy package resource into temp file
         original_image_temp_path = os.path.join(tempfile.gettempdir(), 'original_image_temp.png')
         with open(original_image_temp_path, 'wb') as original_image_temp:
             original_image_temp.write(original_image.read())
