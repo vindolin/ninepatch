@@ -219,6 +219,30 @@ class Ninepatch(object):
         else:
             return 0
 
+    def render_to_fit(self, (width, height)):
+        """ expands so that a content area of width/height can fit
+
+        :return: PIL Image
+        """
+        ca = self.content_area
+
+        min_width = int(self.slice_data['min_scale_size']['x'])
+        min_height = int(self.slice_data['min_scale_size']['y'])
+
+        # creates a new PIL image
+        return self.render(max(width +ca.left + ca.right, min_width),
+                           max(height + ca.top + ca.bottom, min_height))
+
+    def render_with_content(self, image):
+        """ paste image in content area
+        :param image: a PIL image to insert in the content area
+        :return: PIL Image
+        """
+        scaled = self.render_to_fit(image.size)
+        ca = self.content_area
+        scaled.paste(image, (ca.left, ca.top), image)
+        return scaled
+
     def render(self, width, height, filter=Image.ANTIALIAS, cache=False):
         '''render the sliced tiles to a new scaled image'''
         cache_hash = '{} {} {}'.format(width, height, self.filename)
