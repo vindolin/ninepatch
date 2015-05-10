@@ -219,18 +219,19 @@ class Ninepatch(object):
         else:
             return 0
 
-    def render_to_fit(self, (width, height)):
+    def render_to_fit(self, dimension):
         """ expands so that a content area of width/height can fit
 
         :return: PIL Image
         """
+        width, height = dimension
         ca = self.content_area
 
         min_width = int(self.slice_data['min_scale_size']['x'])
         min_height = int(self.slice_data['min_scale_size']['y'])
 
         # creates a new PIL image
-        return self.render(max(width +ca.left + ca.right, min_width),
+        return self.render(max(width + ca.left + ca.right, min_width),
                            max(height + ca.top + ca.bottom, min_height))
 
     def render_with_content(self, image):
