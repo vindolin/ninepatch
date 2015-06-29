@@ -87,8 +87,14 @@ class Ninepatch(object):
             yield mark[0]
             yield mark[1] + 1  # shift end of black region to next tile
 
-    def find_marks(self, image):
-        '''find the cut marks'''
+    @staticmethod
+    def find_marks(image):
+        """ find the cut marks
+
+        :param image: a PIL Image
+        :return:
+        :rtype: dict
+        """
         pixels = image.load()
 
         scale_marks = {'x': [], 'y': []}
@@ -142,7 +148,8 @@ class Ninepatch(object):
         }
 
     def slice(self):
-        '''slice a 9 patch image'''
+        """ slice a 9 patch image
+        """
         slice_data = {}
 
         slice_marks = {
@@ -207,20 +214,48 @@ class Ninepatch(object):
 
     @staticmethod
     def _distributor(start):
-        '''decrement start and yield 1 until it is exhausted, then yield 0'''
+        """ decrement start and yield 1 until it is exhausted, then yield 0
+        """
         n = start
         while True:
             yield 1 if n > 0 else 0
             n -= 1
 
-    def _tile_scale(self, total_scale, scaleable_tile_count):
-        if scaleable_tile_count > 0:
-            return int(total_scale / scaleable_tile_count)
+    @staticmethod
+    def _tile_scale(total_scale, scalable_tile_count):
+        if scalable_tile_count > 0:
+            return int(total_scale / scalable_tile_count)
         else:
             return 0
 
-    def render(self, width, height, filter=Image.ANTIALIAS, cache=False):
-        '''render the sliced tiles to a new scaled image'''
+    def render_to_fit(self, dimension):
+        """ expands so that a content area of width/height can fit
+
+        :return: PIL Image
+        """
+        width, height = dimension
+        ca = self.content_area
+
+        min_width = int(self.slice_data['min_scale_size']['x'])
+        min_height = int(self.slice_data['min_scale_size']['y'])
+
+        # creates a new PIL image
+        return self.render(max(width + ca.left + ca.right, min_width),
+                           max(height + ca.top + ca.bottom, min_height))
+
+    def render_with_content(self, image):
+        """ paste image in content area
+        :param image: a PIL image to insert in the content area
+        :return: PIL Image
+        """
+        scaled = self.render_to_fit(image.size)
+        ca = self.content_area
+        scaled.paste(image, (ca.left, ca.top), image)
+        return scaled
+
+    def render(self, width, height, img_filter=Image.ANTIALIAS, cache=False):
+        """ render the sliced tiles to a new scaled image
+        """
         cache_hash = '{} {} {}'.format(width, height, self.filename)
         if cache and cache_hash in self.render_cache:
             scaled_image = self.render_cache[cache_hash]
@@ -253,13 +288,13 @@ class Ninepatch(object):
             }
 
             # distributes the pixels from the rounding differences until exhausted
-            extra_x_distributor = Ninepatch._distributor(extra['x'])
+            extra_x_distributor = self._distributor(extra['x'])
 
             x_coord = y_coord = 0
 
             for x, column in enumerate(self.slice_data['tiles']):
                 extra_x = 0 if is_even(x) else next(extra_x_distributor)
-                extra_y_distributor = Ninepatch._distributor(extra['y'])
+                extra_y_distributor = self._distributor(extra['y'])
 
                 for y, tile in enumerate(column):
                     extra_y = 0 if is_even(y) else next(extra_y_distributor)
@@ -270,14 +305,14 @@ class Ninepatch(object):
                     if is_even(x) and is_even(y):
                         pass  # use tile as is
                     elif is_even(x):  # scale y
-                        tile = tile.resize((tile.size[0], tile_scale['y'] + extra_y), filter)
+                        tile = tile.resize((tile.size[0], tile_scale['y'] + extra_y), img_filter)
                     elif is_even(y):  # scale x
-                        tile = tile.resize((tile_scale['x'] + extra_x, tile.size[1]), filter)
+                        tile = tile.resize((tile_scale['x'] + extra_x, tile.size[1]), img_filter)
                     else:  # scale both
                         tile = tile.resize((
                             tile_scale['x'] + extra_x,
                             tile_scale['y'] + extra_y
-                        ), filter)
+                        ), img_filter)
 
                     scaled_image.paste(tile, (x_coord, y_coord))
 
@@ -290,14 +325,17 @@ class Ninepatch(object):
 
         return scaled_image
 
-    def _column(self, image, pixels, x):
+    @staticmethod
+    def _column(image, pixels, x):
         return [pixels[(x, y)] for y in range(image.size[1])]
 
-    def _row(self, image, pixels, y):
+    @staticmethod
+    def _row(image, pixels, y):
         return [pixels[(x, y)] for x in range(image.size[0])]
 
     def compress_tile(self, tile):
-        '''look if pixels are repeated on one or two axes and compress the tile'''
+        """ look if pixels are repeated on one or two axes and compress the tile
+        """
         pixels = tile.load()
 
         x_compress = True
@@ -328,7 +366,8 @@ class Ninepatch(object):
         return tile
 
     def export_slices(self, path):
-        '''export slices as PNG images into a directory'''
+        """ export slices as PNG images into a directory
+        """
         file_prefix = os.path.basename(self.filename)
         file_prefix = re.match('(.*)\.9\.png', file_prefix).groups()[0]
         for x, column in enumerate(self.slice_data['tiles']):

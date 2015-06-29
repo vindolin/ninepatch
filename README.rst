@@ -52,6 +52,20 @@ Save the scaled image to a new file:
 
 .. image:: https://raw.githubusercontent.com/vindolin/ninepatch/master/ninepatch/data/ninepatch_bubble_300x300.png
 
+
+Render an image to fit a given width and height
+
+::
+
+    $ ninepatch fit ninepatch_bubble.9.png 250 250 scaled.png
+
+Render an image to include another image
+
+::
+
+    $ ninepatch wrap ninepatch_bubble.9.png image_to_wrap.png scaled.png
+
+
 Slice the 9patch into tiles:
 
 ::
@@ -103,6 +117,8 @@ If you want to install into a virtualenv, pip needs the following packages to co
 
 Changelog
 ---------
+0.1.20
+  * new commands `fit` and `wrap` courtesy of Nicolas Laurance
 0.1.19
   * fixed error in caching
 0.1.18
