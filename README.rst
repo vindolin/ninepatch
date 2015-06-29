@@ -63,8 +63,9 @@ Render an image to include another image
 
 ::
 
-    $ ninepatch wrap ninepatch_bubble.9.png image_to_wrap.png scaled.png
+    $ ninepatch wrap ninepatch_bubble.9.png image_to_wrap.png wrapped.png
 
+.. image:: https://raw.githubusercontent.com/vindolin/ninepatch/master/ninepatch/data/wrapped.png
 
 Slice the 9patch into tiles:
 
