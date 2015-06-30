@@ -62,7 +62,7 @@ Save the scaled image to a new file:
 .. image:: https://raw.githubusercontent.com/vindolin/ninepatch/master/ninepatch/data/ninepatch_bubble_300x300.png
 
 
-Render an image to fit a given width and height
+Render an image so it's content area fits a given width and height
 
 ::
 
@@ -138,4 +138,5 @@ Changelog
 0.1.17
   * new method export_slices()
   * changed command line parameters (render/slice)
+
 ...
