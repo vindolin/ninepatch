@@ -30,7 +30,16 @@ Python usage
     from ninepatch import Ninepatch
     ninepatch = Ninepatch('ninepatch_bubble.9.png')
     print(ninepatch.content_area)  # content_area(left=23, top=20, right=27, bottom=59)
+
+    # render the image to a specific size
     scaled_image = ninepatch.render(500, 400) # creates a new PIL image
+
+    # render the image so it's content area fits (width, height)
+    image_fit = ninepatch.render_fit(300, 200)
+
+    # render the image so it wraps another PIL image
+    image_to_wrap = Image.open('dmt.png')
+    wrapped_image = ninepatch.render_wrap(image_to_wrap)
 
 
 Command line usage
@@ -127,23 +136,4 @@ Changelog
 0.1.17
   * new method export_slices()
   * changed command line parameters (render/slice)
-0.1.10
-  * missing guides are now handled properly
-0.1.9
-  * parse the fill area
-  * switched to setuptools
-0.1.4
-  * added Tkinter viewer
-
-Notes
------
-I wrote this tool for the ninepatch\_actor.py in my Clutter example project:
-https://github.com/vindolin/Clutter-Python-examples
-
-Issues
-------
-...
-
-TODO
-----
 ...

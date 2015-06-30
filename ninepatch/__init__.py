@@ -16,7 +16,9 @@ class ScaleError(Exception):
 class NinepatchError(Exception):
     pass
 
-is_even = lambda value: value % 2 == 0
+
+def is_even(value):
+    return value % 2 == 0
 
 
 class Ninepatch(object):
@@ -26,7 +28,7 @@ class Ninepatch(object):
 
     @classmethod
     def get_cache_size(cls):
-        #return sys.getsizeof(cls.slice_cache), sys.getsizeof(cls.render_cache)
+        # return sys.getsizeof(cls.slice_cache), sys.getsizeof(cls.render_cache)
         return cls.render_cache
 
     def __init__(self, filename, cache=False):
@@ -63,22 +65,6 @@ class Ninepatch(object):
             self.marks['fill']['y'][0],
             self.image.size[0] - self.marks['fill']['x'][1],
             self.image.size[1] - self.marks['fill']['y'][1],
-        )
-
-    @property  # DEPRECATED, use content_area
-    def fill_area(self):
-        if self.marks['fill']['x'] == [] or self.marks['fill']['y'] == []:
-            return None
-
-        return (
-            (
-                self.marks['fill']['x'][0] - 1,  # left
-                self.marks['fill']['y'][0] - 1,  # top
-            ),
-            (
-                self.image_size[0] - self.marks['fill']['x'][1] - 2,  # right
-                self.image_size[1] - self.marks['fill']['y'][1] - 2,  # bottom
-            ),
         )
 
     @staticmethod
@@ -228,12 +214,11 @@ class Ninepatch(object):
         else:
             return 0
 
-    def render_to_fit(self, dimension):
+    def render_fit(self, width, height):
         """ expands so that a content area of width/height can fit
 
         :return: PIL Image
         """
-        width, height = dimension
         ca = self.content_area
 
         min_width = int(self.slice_data['min_scale_size']['x'])
@@ -243,15 +228,15 @@ class Ninepatch(object):
         return self.render(max(width + ca.left + ca.right, min_width),
                            max(height + ca.top + ca.bottom, min_height))
 
-    def render_with_content(self, image):
+    def render_wrap(self, image):
         """ paste image in content area
         :param image: a PIL image to insert in the content area
         :return: PIL Image
         """
-        scaled = self.render_to_fit(image.size)
+        scaled_image = self.render_fit(image.size)
         ca = self.content_area
-        scaled.paste(image, (ca.left, ca.top), image)
-        return scaled
+        scaled_image.paste(image, (ca.left, ca.top), image)
+        return scaled_image
 
     def render(self, width, height, img_filter=Image.ANTIALIAS, cache=False):
         """ render the sliced tiles to a new scaled image

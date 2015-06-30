@@ -56,7 +56,7 @@ if __name__ == '__main__':
 
     elif args.command == 'fit':
         ninepatch = Ninepatch(args.source_filename)
-        scaled_image = ninepatch.render_to_fit((args.width, args.height))
+        scaled_image = ninepatch.render_fit(args.width, args.height)
         if args.target_filename:
             scaled_image.save(args.target_filename)
         else:
@@ -65,7 +65,7 @@ if __name__ == '__main__':
     elif args.command == 'wrap':
         ninepatch = Ninepatch(args.source_filename)
         image = Image.open(args.wrapped_filename)
-        scaled_image = ninepatch.render_with_content(image)
+        scaled_image = ninepatch.render_wrap(image)
         if args.target_filename:
             scaled_image.save(args.target_filename)
         else:
