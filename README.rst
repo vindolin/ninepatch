@@ -38,7 +38,7 @@ Python usage
     image_fit = ninepatch.render_fit(300, 200)
 
     # render the image so it wraps another PIL image
-    image_to_wrap = Image.open('dmt.png')
+    image_to_wrap = Image.open('image_to_wrap.png')
     wrapped_image = ninepatch.render_wrap(image_to_wrap)
 
 
@@ -66,7 +66,9 @@ Render an image to fit a given width and height
 
 ::
 
-    $ ninepatch fit ninepatch_bubble.9.png 250 250 scaled.png
+    $ ninepatch fit ninepatch_bubble.9.png 150 150 fit.png
+
+.. image:: https://raw.githubusercontent.com/vindolin/ninepatch/master/ninepatch/data/fit.png
 
 Render an image to include another image
 
