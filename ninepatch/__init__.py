@@ -233,7 +233,7 @@ class Ninepatch(object):
         :param image: a PIL image to insert in the content area
         :return: PIL Image
         """
-        scaled_image = self.render_fit(image.size)
+        scaled_image = self.render_fit(*image.size)
         ca = self.content_area
         scaled_image.paste(image, (ca.left, ca.top), image)
         return scaled_image
