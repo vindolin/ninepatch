@@ -1,12 +1,12 @@
 Slice Android style 9-patch images, resize and interactively preview them.
 ==========================================================================
 
-[![Travis CI](https://travis-ci.org/vindolin/ninepatch.svg?branch=master){width="90"}](https://travis-ci.org/vindolin/ninepatch)
+[![Travis CI](https://travis-ci.org/vindolin/ninepatch.svg?branch=master)](https://travis-ci.org/vindolin/ninepatch)
 
 See <https://developer.android.com/tools/help/draw9patch.html> for a
 9-patch description.
 
-[![Example image](https://raw.githubusercontent.com/vindolin/ninepatch/master/ninepatch/data/ninepatch_bubble.9.png){width="320"}](https://raw.githubusercontent.com/vindolin/ninepatch/master/ninepatch/data/ninepatch_bubble.9.png)
+[![Example image](https://raw.githubusercontent.com/vindolin/ninepatch/master/ninepatch/data/ninepatch_bubble.9.png)](https://raw.githubusercontent.com/vindolin/ninepatch/master/ninepatch/data/ninepatch_bubble.9.png)
 
 Installation
 ============
@@ -72,7 +72,7 @@ Slice the 9patch into tiles:
 Interactive viewer
 ==================
 
-[![ninepatch viewer screenshot](https://raw.githubusercontent.com/vindolin/ninepatch/master/ninepatch/data/ninepatch_viewer_screenshot.png){width="419"}](https://raw.githubusercontent.com/vindolin/ninepatch/master/ninepatch/data/ninepatch_viewer_screenshot.png)
+[![ninepatch viewer screenshot](https://raw.githubusercontent.com/vindolin/ninepatch/master/ninepatch/data/ninepatch_viewer_screenshot.png)](https://raw.githubusercontent.com/vindolin/ninepatch/master/ninepatch/data/ninepatch_viewer_screenshot.png)
 
 Interactively resize and preview an image in a Tkinter viewer:
 
