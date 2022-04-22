@@ -1,2 +1,4 @@
 .py?
 *.egg-info
+ninepatch/__pycache__/*
+
