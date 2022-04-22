@@ -101,6 +101,10 @@ packages to compile PIL with Tkinter support:
 Changelog
 =========
 
+0.1.22
+
+:   -   fixed error that prevented the ninepatch_viewer to work
+
 0.1.21
 
 :   -   fixed bug in wrap()

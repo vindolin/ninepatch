@@ -354,7 +354,7 @@ class Ninepatch(object):
         """ export slices as PNG images into a directory
         """
         file_prefix = os.path.basename(self.filename)
-        file_prefix = re.match('(.*)\.9\.png', file_prefix).groups()[0]
+        file_prefix = re.match(r'(.*)\.9\.png', file_prefix).groups()[0]
         for x, column in enumerate(self.slice_data['tiles']):
             for y, tile in enumerate(column):
                 tile = self.compress_tile(tile)
