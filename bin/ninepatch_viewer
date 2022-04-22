@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-import Tkinter as tk
+import tkinter as tk
 from ninepatch import Ninepatch, ScaleError
 from PIL import ImageTk
 import argparse
@@ -27,14 +27,14 @@ if __name__ == '__main__':
             img = ImageTk.PhotoImage(scaled_image)
             canvas.delete("all")
             canvas.create_image(border, border, anchor=tk.NW, image=img)
-            if ninepatch.fill_area:
+            if ninepatch.content_area:
                 canvas.create_rectangle((
-                    border + ninepatch.fill_area[0][0],
-                    border + ninepatch.fill_area[0][1],
-                    event.width - border - ninepatch.fill_area[1][0],
-                    event.height - border - ninepatch.fill_area[1][1],
+                    border + ninepatch.content_area[0],
+                    border + ninepatch.content_area[1],
+                    event.width - border - ninepatch.content_area[2],
+                    event.height - border - ninepatch.content_area[3],
                 ), dash=(3, 6), outline='black')
-        except ScaleError, e:
+        except ScaleError as e:
             root.title(e)
 
     title = '9-patch viewer'
