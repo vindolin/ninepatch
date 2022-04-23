@@ -12,6 +12,7 @@ setup(
     license=open('LICENSE').read(),
     description='Slice and scale 9-patch images',
     long_description=open('README.md').read(),
+    long_description_content_type="text/markdown",
     install_requires=['pillow'],
     include_package_data=True,
     data_files=[('', ['LICENSE', 'README.md'])],
