@@ -69,6 +69,49 @@ Slice the 9patch into tiles:
 
 ![image](https://raw.githubusercontent.com/vindolin/ninepatch/master/ninepatch/data/slice_export.png)
 
+Slice the 9patch and return a JSON reprensentation of the slicing data:
+
+    $ ninepatch info ninepatch_bubble.9.png
+
+```JSON
+{
+    "marks": {
+        "fill": {
+            "x": [
+                23,
+                231
+            ],
+            "y": [
+                20,
+                82
+            ]
+        },
+        "scale": {
+            "x": [
+                [
+                    49,
+                    49
+                ],
+                [
+                    89,
+                    196
+                ]
+            ],
+            "y": [
+                [
+                    42,
+                    63
+                ]
+            ]
+        }
+    },
+    "size": [
+        258,
+        141
+    ]
+}
+```
+
 Interactive viewer
 ==================
 
