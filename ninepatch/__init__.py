@@ -8,6 +8,13 @@ __all__ = ['Ninepatch', 'ScaleError']
 
 content_area = namedtuple('content_area', ['left', 'top', 'right', 'bottom'])
 
+try:
+    ANTIALIAS_FILTER = Image.ANTIALIAS
+except AttributeError:
+    # fixes #6: Not working with Pillow 10.0.0
+    # Image.ANTIALIAS was deprecated in Pillow 10.0.0
+    ANTIALIAS_FILTER = Image.Resampling.LANCZOS
+
 
 class ScaleError(Exception):
     pass
@@ -238,7 +245,7 @@ class Ninepatch(object):
         scaled_image.paste(image, (ca.left, ca.top), image)
         return scaled_image
 
-    def render(self, width, height, img_filter=Image.ANTIALIAS, cache=False):
+    def render(self, width, height, img_filter=ANTIALIAS_FILTER, cache=False):
         """ render the sliced tiles to a new scaled image
         """
         cache_hash = '{} {} {}'.format(width, height, self.filename)
