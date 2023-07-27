@@ -1,4 +1,4 @@
-Slice Android style 9-patch images, resize and interactively preview them.
+Slice Android style 9-patch images, resize and preview them interactively.
 ==========================================================================
 
 [![Travis CI](https://travis-ci.org/vindolin/ninepatch.svg?branch=master)](https://travis-ci.org/vindolin/ninepatch)
@@ -68,6 +68,49 @@ Slice the 9patch into tiles:
     $ ninepatch slice ninepatch_bubble.9.png ./outputdir
 
 ![image](https://raw.githubusercontent.com/vindolin/ninepatch/master/ninepatch/data/slice_export.png)
+
+Slice the 9patch and return a JSON reprensentation of the slicing data:
+
+    $ ninepatch info ninepatch_bubble.9.png
+
+```JSON
+{
+    "marks": {
+        "fill": {
+            "x": [
+                23,
+                231
+            ],
+            "y": [
+                20,
+                82
+            ]
+        },
+        "scale": {
+            "x": [
+                [
+                    49,
+                    49
+                ],
+                [
+                    89,
+                    196
+                ]
+            ],
+            "y": [
+                [
+                    42,
+                    63
+                ]
+            ]
+        }
+    },
+    "size": [
+        258,
+        141
+    ]
+}
+```
 
 Interactive viewer
 ==================
