@@ -297,7 +297,15 @@ class Ninepatch(object):
                     if is_even(x) and is_even(y):
                         pass  # use tile as is
                     elif is_even(x):  # scale y
+                        if tile.size[0] != 0:
+                            tile = tile.resize((tile.size[0], tile_scale['y'] + extra_y), img_filter)
+                        else:
+                            tile = Image.new('RGBA', (tile.size[0], tile_scale['y'] + extra_y), None)
                     elif is_even(y):  # scale x
+                        if tile.size[1] != 0:
+                            tile = tile.resize((tile_scale['x'] + extra_x, tile.size[1]), img_filter)
+                        else:
+                            tile = Image.new('RGBA', (tile_scale['x'] + extra_x, tile.size[1]), None)
                     else:  # scale both
                         tile = tile.resize((
                             tile_scale['x'] + extra_x,

@@ -34,3 +34,6 @@ class TestNinepatch(unittest.TestCase):
 
     def test_ninepatch(self):
         self.render_compare('test_ninepatch.9.png', 'test_ninepatch_421x333_good_test_result.png', 421, 333)
+
+    def test_zero_size_tiles(self):
+        self.render_compare('test_zero_size_tiles.9.png', 'test_zero_size_tiles_300x300_good_test_result.png', 300, 300)
