@@ -1,6 +1,6 @@
 [build-system]
-requires = ["flit_core >=3.2,<4"]
-build-backend = "flit_core.buildapi"
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
 
 [project]
 name = "ninepatch"
@@ -8,9 +8,12 @@ version = "0.2.0"
 authors = [
   { name="Thomas Schüßler", email="vindolin@gmail.com" },
 ]
+dependencies = [
+    "pillow",
+]
 description = "Slice and scale 9-patch images"
 readme = "README.md"
-requires-python = ">=3.7"
+requires-python = ">=3.9"
 classifiers = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: MIT License",
@@ -19,4 +22,7 @@ classifiers = [
 
 [project.urls]
 "Homepage" = "https://github.com/vindolin/ninepatch"
-"Bug Tracker" = "https://github.com/vindolin/ninepatch/issues"
+
+[project.scripts]
+ninepatch = 'ninepatch.commands.ninepatch:main'
+ninepatch-viewer = 'ninepatch.commands.ninepatch_viewer:main'

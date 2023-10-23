@@ -248,7 +248,7 @@ class Ninepatch(object):
     def render(self, width, height, img_filter=ANTIALIAS_FILTER, cache=False):
         """ render the sliced tiles to a new scaled image
         """
-        cache_hash = '{} {} {}'.format(width, height, self.filename)
+        cache_hash = f'{width} {height} {self.filename}'
         if cache and cache_hash in self.render_cache:
             scaled_image = self.render_cache[cache_hash]
         else:
@@ -297,9 +297,7 @@ class Ninepatch(object):
                     if is_even(x) and is_even(y):
                         pass  # use tile as is
                     elif is_even(x):  # scale y
-                        tile = tile.resize((tile.size[0], tile_scale['y'] + extra_y), img_filter)
                     elif is_even(y):  # scale x
-                        tile = tile.resize((tile_scale['x'] + extra_x, tile.size[1]), img_filter)
                     else:  # scale both
                         tile = tile.resize((
                             tile_scale['x'] + extra_x,
@@ -367,4 +365,4 @@ class Ninepatch(object):
                 tile = self.compress_tile(tile)
                 slice_image = Image.new('RGBA', (tile.size[0], tile.size[1]), None)
                 slice_image.paste(tile)
-                slice_image.save('{}/{}_{}_{}.png'.format(path, file_prefix, x, y))
+                slice_image.save(f'{path}/{file_prefix}_{x}_{y}.png')

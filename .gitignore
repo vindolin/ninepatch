@@ -1,4 +1,4 @@
-.py?
+*.pyc
 *.egg-info
 ninepatch/__pycache__
 build

@@ -1,17 +1,22 @@
-#!/usr/bin/env python
+from io import BytesIO
+import argparse
+from importlib import resources
+import importlib.metadata
 import tkinter as tk
 from ninepatch import Ninepatch, ScaleError
 from PIL import ImageTk
-import argparse
-import pkg_resources
 
-if __name__ == '__main__':
+
+def main():
     parser = argparse.ArgumentParser(description='Interactively scale Android style 9-patch images.')
     parser.add_argument('image_filename', nargs='?', default='DEMO_IMAGE')
+    parser.add_argument('--version', action='version', version=importlib.metadata.version('ninepatch'))
     args = parser.parse_args()
 
     if args.image_filename == 'DEMO_IMAGE':
-        args.image_filename = pkg_resources.resource_stream('ninepatch', 'data/ninepatch_bubble.9.png')
+        ref = resources.files('ninepatch').joinpath('data/ninepatch_bubble.9.png')
+        with ref.open('rb') as fp:
+            args.image_filename = BytesIO(fp.read())
 
     ninepatch = Ninepatch(args.image_filename)
 
@@ -49,3 +54,7 @@ if __name__ == '__main__':
     canvas.bind('<Configure>', resize)
 
     root.mainloop()
+
+
+if __name__ == "__main__":
+    main()

@@ -1,14 +1,14 @@
-#!/usr/bin/env python3
-
 import sys
 import json
 from PIL import Image
 from ninepatch import Ninepatch
+import importlib.metadata
 
 
-if __name__ == '__main__':
+def main():
     import argparse
     parser = argparse.ArgumentParser()
+    parser.add_argument('--version', action='version', version=importlib.metadata.version('ninepatch'))
 
     subparsers = parser.add_subparsers(dest='command')
 
@@ -36,7 +36,7 @@ if __name__ == '__main__':
     parser_wrap.add_argument('wrapped_filename', help='filename of the image to wrap inside a ninepatch')
     parser_wrap.add_argument('target_filename', nargs='?', help='filename or empty to open the viewer')
 
-    args = parser.parse_args()
+    args = parser.parse_args(args=None if sys.argv[1:] else ['--help'])
 
     if args.command == 'render':
         ninepatch = Ninepatch(args.source_filename)
@@ -70,3 +70,7 @@ if __name__ == '__main__':
             scaled_image.save(args.target_filename)
         else:
             scaled_image.show()
+
+
+if __name__ == "__main__":
+    main()
