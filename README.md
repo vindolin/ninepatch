@@ -4,7 +4,7 @@ Slice Android style 9-patch images, resize and preview them interactively.
 See <https://developer.android.com/tools/help/draw9patch.html> for a
 9-patch description.
 
-[![Example image](https://raw.githubusercontent.com/vindolin/ninepatch/master/ninepatch/src/ninepatch/data/ninepatch_bubble.9.png)](https://raw.githubusercontent.com/vindolin/ninepatch/master/ninepatch/src/ninepatch/data/ninepatch_bubble.9.png)
+[![Example image](https://raw.githubusercontent.com/vindolin/ninepatch/master/src/ninepatch/data/ninepatch_bubble.9.png)](https://raw.githubusercontent.com/vindolin/ninepatch/master/src/ninepatch/data/ninepatch_bubble.9.png)
 
 Installation
 ============
@@ -47,25 +47,25 @@ Save the scaled image to a new file:
 
     $ ninepatch render ninepatch_bubble.9.png 300 300 scaled.png
 
-![image](https://raw.githubusercontent.com/vindolin/ninepatch/master/ninepatch/src/ninepatch/data/ninepatch_bubble_300x300.png)
+![image](https://raw.githubusercontent.com/vindolin/ninepatch/master/src/ninepatch/data/ninepatch_bubble_300x300.png)
 
 Render an image so it's content area fits a given width and height
 
     $ ninepatch fit ninepatch_bubble.9.png 150 150 fit.png
 
-![image](https://raw.githubusercontent.com/vindolin/ninepatch/master/ninepatch/src/ninepatch/data/fit.png)
+![image](https://raw.githubusercontent.com/vindolin/ninepatch/master/src/ninepatch/data/fit.png)
 
 Render an image to include another image
 
     $ ninepatch wrap ninepatch_bubble.9.png image_to_wrap.png wrapped.png
 
-![image](https://raw.githubusercontent.com/vindolin/ninepatch/master/ninepatch/src/ninepatch/data/wrapped.png)
+![image](https://raw.githubusercontent.com/vindolin/ninepatch/master/src/ninepatch/data/wrapped.png)
 
 Slice the 9patch into tiles:
 
     $ ninepatch slice ninepatch_bubble.9.png ./outputdir
 
-![image](https://raw.githubusercontent.com/vindolin/ninepatch/master/ninepatch/src/ninepatch/data/slice_export.png)
+![image](https://raw.githubusercontent.com/vindolin/ninepatch/master/src/ninepatch/data/slice_export.png)
 
 Slice the 9patch and return a JSON reprensentation of the slicing data:
 
@@ -113,7 +113,7 @@ Slice the 9patch and return a JSON reprensentation of the slicing data:
 Interactive viewer
 ==================
 
-[![ninepatch viewer screenshot](https://raw.githubusercontent.com/vindolin/ninepatch/master/ninepatch/src/ninepatch/data/ninepatch_viewer_screenshot.png)](https://raw.githubusercontent.com/vindolin/ninepatch/master/ninepatch/src/ninepatch/data/ninepatch_viewer_screenshot.png)
+[![ninepatch viewer screenshot](https://raw.githubusercontent.com/vindolin/ninepatch/master/src/ninepatch/data/ninepatch_viewer_screenshot.png)](https://raw.githubusercontent.com/vindolin/ninepatch/master/src/ninepatch/data/ninepatch_viewer_screenshot.png)
 
 Interactively resize and preview an image in a Tkinter viewer:
 
