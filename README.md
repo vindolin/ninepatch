@@ -141,6 +141,9 @@ packages to compile PIL with Tkinter support:
 
 Changelog
 =========
+0.2.0
+
+:   -   allow 0-size tiles, now works with pillow >=10.0.0
 
 0.1.22
 
