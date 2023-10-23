@@ -1,8 +1,6 @@
 Slice Android style 9-patch images, resize and preview them interactively.
 ==========================================================================
 
-[![Travis CI](https://travis-ci.org/vindolin/ninepatch.svg?branch=master)](https://travis-ci.org/vindolin/ninepatch)
-
 See <https://developer.android.com/tools/help/draw9patch.html> for a
 9-patch description.
 
