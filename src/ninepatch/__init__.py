@@ -153,27 +153,28 @@ class Ninepatch(object):
             'x': self.image.size[0],
             'y': self.image.size[1]
         }
-        for axis in ('x', 'y'):
-            slice_marks[axis] = [1] + list(
-                self._chain(self.marks['scale'][axis])) + [image_size[axis] - 1]
-
+        slice_marks = {
+            axis: [1] + list(self._chain(self.marks['scale'][axis])) + [image_size[axis] - 1]
+            for axis in ('x', 'y')
+        }
         counts = {
             'x': len(slice_marks['x']) - 1,
             'y': len(slice_marks['y']) - 1,
         }
 
         tiles = [[0 for y in range(counts['y'])] for x in range(counts['x'])]
-        for x in range(counts['x']):
-            for y in range(counts['y']):
-
-                # cut our tile region
-                tiles[x][y] = self.image.crop((
+        tiles = [
+            [
+                self.image.crop((
                     slice_marks['x'][x],
                     slice_marks['y'][y],
                     slice_marks['x'][x + 1],
                     slice_marks['y'][y + 1],
                 ))
-
+                for y in range(counts['y'])
+            ]
+            for x in range(counts['x'])
+        ]
         slice_data['tiles'] = tiles
 
         slice_data['tile_count'] = {
@@ -190,13 +191,8 @@ class Ninepatch(object):
         }
 
         # calculate fixed_tile_size
-        for x, column in enumerate(tiles):
-            for y, tile in enumerate(column):
-                if y == 0 and is_even(x):  # only on first row
-                    slice_data['fixed_tile_size']['x'] += tile.size[0]
-                if x == 0 and is_even(y):  # only on first column
-                    slice_data['fixed_tile_size']['y'] += tile.size[1]
-
+        slice_data['fixed_tile_size']['x'] = sum(tile.size[0] for x, column in enumerate(tiles) for y, tile in enumerate(column) if y == 0 and is_even(x))
+        slice_data['fixed_tile_size']['y'] = sum(tile.size[1] for x, column in enumerate(tiles) for y, tile in enumerate(column) if x == 0 and is_even(y))
         # add 1 pixel for every scalable region
         slice_data['min_scale_size'] = {
             'x': slice_data['fixed_tile_size']['x'] + slice_data['scaleable_tile_count']['x'],
