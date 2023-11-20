@@ -145,10 +145,6 @@ class Ninepatch(object):
         """
         slice_data = {}
 
-        slice_marks = {
-            'x': [],
-            'y': []
-        }
         image_size = {
             'x': self.image.size[0],
             'y': self.image.size[1]
