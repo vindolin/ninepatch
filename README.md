@@ -1,5 +1,6 @@
 Slice Android style 9-patch images, resize and preview them interactively.
 ==========================================================================
+[![Python application](https://github.com/vindolin/ninepatch/actions/workflows/python-app.yml/badge.svg)](https://github.com/vindolin/ninepatch/actions/workflows/python-app.yml)
 
 See <https://developer.android.com/tools/help/draw9patch.html> for a
 9-patch description.
