@@ -117,11 +117,11 @@ Interactive viewer
 
 Interactively resize and preview an image in a Tkinter viewer:
 
-    $ ninepatch_viewer ninepatch_bubble.9.png
+    $ ninepatch-viewer ninepatch_bubble.9.png
 
     or just:
 
-    $ ninepatch_viewer
+    $ ninepatch-viewer
 
     without arguments to see the demo image
 
